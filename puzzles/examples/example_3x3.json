@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "format_example_3x3",
+  "title": "Schema example, not a final benchmark case",
+  "size": 3,
+  "characters": [
+    {"cell":"A1","name":"Ada","profession":"Architect"},
+    {"cell":"B1","name":"Bao","profession":"Baker"},
+    {"cell":"C1","name":"Chi","profession":"Doctor"},
+    {"cell":"A2","name":"Duy","profession":"Designer"},
+    {"cell":"B2","name":"Ella","profession":"Engineer"},
+    {"cell":"C2","name":"Finn","profession":"Florist"},
+    {"cell":"A3","name":"Gia","profession":"Guide"},
+    {"cell":"B3","name":"Hana","profession":"Historian"},
+    {"cell":"C3","name":"Iris","profession":"Illustrator"}
+  ],
+  "solution": {"A1":true,"B1":false,"C1":true,"A2":false,"B2":true,"C2":false,"A3":true,"B3":false,"C3":true},
+  "clues": {
+    "A1":{"id":"C01","kind":"FACT","cells":["B1"],"status":false},
+    "B1":{"id":"C02","kind":"FACT","cells":["C1"],"status":true},
+    "C1":{"id":"C03","kind":"FACT","cells":["A2"],"status":false},
+    "A2":{"id":"C04","kind":"FACT","cells":["B2"],"status":true},
+    "B2":{"id":"C05","kind":"FACT","cells":["C2"],"status":false},
+    "C2":{"id":"C06","kind":"FACT","cells":["A3"],"status":true},
+    "A3":{"id":"C07","kind":"FACT","cells":["B3"],"status":false},
+    "B3":{"id":"C08","kind":"FACT","cells":["C3"],"status":true},
+    "C3":{"id":"C09","kind":"FACT","cells":["A1"],"status":true}
+  },
+  "initially_revealed": ["A1"]
+}

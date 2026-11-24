@@ -1,0 +1,2 @@
+# The scaffold uses Python 3.11+ standard library only.
+# Member 4 adds and pins the selected GUI library before GUI implementation.

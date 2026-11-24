@@ -1,0 +1,16 @@
+from typing import Protocol
+from .models import Analysis, CNF, PublicState, SATResult, Status, Uniqueness
+
+
+class Solver(Protocol):
+    def solve(self, cnf: CNF, assumptions: tuple[int, ...] = (), *, timeout_s: float = 5.0) -> SATResult: ...
+
+
+class Encoder(Protocol):
+    def encode(self, public_state: PublicState) -> CNF: ...
+
+
+class Agent(Protocol):
+    def analyze(self, public_state: PublicState, *, timeout_s: float = 5.0) -> Analysis: ...
+    def next_forced(self, analysis: Analysis) -> tuple[str, Status] | None: ...
+    def check_uniqueness(self, full_clue_state: PublicState, *, timeout_s: float = 5.0) -> Uniqueness: ...
