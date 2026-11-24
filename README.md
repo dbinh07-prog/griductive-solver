@@ -7,7 +7,7 @@
 | Thành viên | File/folder làm chính | Công việc |
 |---|---|---|
 | **1 — Leader** | `algorithms/dpll.py`, `game/session.py`, `game/worker.py`, `contracts/`, `docs/API.md` | DPLL SAT Solver, kiến trúc, ghép engine–encoder–agent–GUI, trace và thống kê tích hợp. **Không tổng hợp report.** |
-| **2 — Logic (Nhân)** | `logic/encoder.py`, `logic/agent.py` | CNF encoder, tự tìm hiểu và chọn ít nhất hai extensions khác nhau theo đề, Logic Agent, entailment, uniqueness. |
+| **2 — Logic ** | `logic/encoder.py`, `logic/agent.py` | CNF encoder, tự tìm hiểu và chọn ít nhất hai extensions khác nhau theo đề, Logic Agent, entailment, uniqueness. |
 | **3 — Engine và thực nghiệm** | `core/`, `validation/`, `puzzles/`, `experiments/`, `run_experiments.py` | Game Engine, loader, regions, dataset, semantic evaluator độc lập, kiểm tra puzzle và chạy benchmark. |
 | **4 — GUI** | `main.py`, `app_controller.py`, `scenes/`, `ui/`, `assets/`, `requirements.txt` | Tự thiết kế và code toàn bộ giao diện, điều khiển, highlight clue, animation và bảng kết quả. |
 | **5 — Tài liệu, không code** | `docs/QA.md`, `report/`, hướng dẫn chơi/chạy trong README | Tổng hợp report, kiểm thử thủ công, ghi lỗi, kịch bản/quay/dựng video, kiểm tra gói nộp. **Không chạy benchmark.** |
