@@ -97,6 +97,5 @@ Không đợi gần hạn mới ghép. Mỗi PR tập trung vào module của m�
 ## Tham khảo và nộp bài
 
 - Cách tổ chức scaffold dựa trên ZIP Bloxorz mà nhóm cung cấp (commit `467598f61060871e68397da4e7fbc3092cdb460e`).
-- Đã xem repo Griductive mẫu tại [TranTai35/griductive-solver](https://github.com/TranTai35/griductive-solver), mốc `52c8a4d09a6ac15f13d76b03f58413e6c800afee`. Bộ khung này không chép phần triển khai game/thuật toán/GUI của repo đó.
 - Yêu cầu chính lấy từ đề Griductive do nhóm cung cấp; bảng đối chiếu nằm trong `docs/REQUIREMENTS.md`.
 - Người 5 xem [checklist nộp bài](report/SUBMISSION.md). Ghi nguồn tham khảo và cách dùng AI/prompts thực tế trong phụ lục; không tự tạo kết quả hoặc khai là chưa dùng nếu đã dùng.
