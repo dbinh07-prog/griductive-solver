@@ -1,0 +1,405 @@
+{
+  "schema_version": 1,
+  "id": "bench_5x5_02_medium",
+  "title": "5x5 Case 02 — Medium",
+  "size": 5,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Illustrator"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Lawyer"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Vet"
+    },
+    {
+      "cell": "D1",
+      "name": "Duy",
+      "profession": "Umpire"
+    },
+    {
+      "cell": "E1",
+      "name": "Ella",
+      "profession": "Historian"
+    },
+    {
+      "cell": "A2",
+      "name": "Finn",
+      "profession": "Writer"
+    },
+    {
+      "cell": "B2",
+      "name": "Gia",
+      "profession": "Scientist"
+    },
+    {
+      "cell": "C2",
+      "name": "Hana",
+      "profession": "Teacher"
+    },
+    {
+      "cell": "D2",
+      "name": "Iris",
+      "profession": "Tailor"
+    },
+    {
+      "cell": "E2",
+      "name": "Jude",
+      "profession": "Guide"
+    },
+    {
+      "cell": "A3",
+      "name": "Kien",
+      "profession": "Architect"
+    },
+    {
+      "cell": "B3",
+      "name": "Linh",
+      "profession": "Chemist"
+    },
+    {
+      "cell": "C3",
+      "name": "Minh",
+      "profession": "Pilot"
+    },
+    {
+      "cell": "D3",
+      "name": "Nora",
+      "profession": "Keeper"
+    },
+    {
+      "cell": "E3",
+      "name": "Omar",
+      "profession": "Sculptor"
+    },
+    {
+      "cell": "A4",
+      "name": "Phuc",
+      "profession": "Mechanic"
+    },
+    {
+      "cell": "B4",
+      "name": "Quynh",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "C4",
+      "name": "Ryan",
+      "profession": "Florist"
+    },
+    {
+      "cell": "D4",
+      "name": "Sara",
+      "profession": "Baker"
+    },
+    {
+      "cell": "E4",
+      "name": "Tuan",
+      "profession": "Weaver"
+    },
+    {
+      "cell": "A5",
+      "name": "Una",
+      "profession": "Nurse"
+    },
+    {
+      "cell": "B5",
+      "name": "Vy",
+      "profession": "Optician"
+    },
+    {
+      "cell": "C5",
+      "name": "Wren",
+      "profession": "Journalist"
+    },
+    {
+      "cell": "D5",
+      "name": "Xuan",
+      "profession": "Ranger"
+    },
+    {
+      "cell": "E5",
+      "name": "Yuna",
+      "profession": "Engineer"
+    }
+  ],
+  "solution": {
+    "A1": true,
+    "B1": true,
+    "C1": false,
+    "D1": true,
+    "E1": true,
+    "A2": true,
+    "B2": true,
+    "C2": true,
+    "D2": false,
+    "E2": false,
+    "A3": true,
+    "B3": false,
+    "C3": false,
+    "D3": false,
+    "E3": false,
+    "A4": true,
+    "B4": true,
+    "C4": true,
+    "D4": true,
+    "E4": false,
+    "A5": true,
+    "B5": true,
+    "C5": false,
+    "D5": true,
+    "E5": false
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "SAME",
+      "cells": [
+        "C1",
+        "D2"
+      ]
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "DIFFERENT",
+      "cells": [
+        "B5",
+        "E4"
+      ]
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "DIFFERENT",
+      "cells": [
+        "C1",
+        "A1"
+      ]
+    },
+    "D1": {
+      "id": "C04",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "ROW",
+        "index": 4
+      },
+      "k": 4
+    },
+    "E1": {
+      "id": "C05",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "D2",
+          "D3",
+          "B4"
+        ]
+      },
+      "k": 2
+    },
+    "A2": {
+      "id": "C06",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "k": 4
+    },
+    "B2": {
+      "id": "C07",
+      "kind": "DIFFERENT",
+      "cells": [
+        "C1",
+        "B4"
+      ]
+    },
+    "C2": {
+      "id": "C08",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "k": 2
+    },
+    "D2": {
+      "id": "C09",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "D2",
+          "A3",
+          "C3",
+          "B5"
+        ]
+      },
+      "k": 3
+    },
+    "E2": {
+      "id": "C10",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "COLUMN",
+        "index": 1
+      },
+      "k": 5
+    },
+    "A3": {
+      "id": "C11",
+      "kind": "SAME",
+      "cells": [
+        "A1",
+        "B2"
+      ]
+    },
+    "B3": {
+      "id": "C12",
+      "kind": "SAME",
+      "cells": [
+        "B5",
+        "D4"
+      ]
+    },
+    "C3": {
+      "id": "C13",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B3",
+          "C3"
+        ]
+      },
+      "k": 0
+    },
+    "D3": {
+      "id": "C14",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "D2"
+      },
+      "k": 3
+    },
+    "E3": {
+      "id": "C15",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "E2",
+          "A3"
+        ]
+      },
+      "k": 1
+    },
+    "A4": {
+      "id": "C16",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "E5"
+      },
+      "k": 2
+    },
+    "B4": {
+      "id": "C17",
+      "kind": "DIFFERENT",
+      "cells": [
+        "D2",
+        "D1"
+      ]
+    },
+    "C4": {
+      "id": "C18",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C1",
+          "B5"
+        ]
+      },
+      "k": 1
+    },
+    "D4": {
+      "id": "C19",
+      "kind": "SAME",
+      "cells": [
+        "B1",
+        "C4"
+      ]
+    },
+    "E4": {
+      "id": "C20",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "E3"
+      },
+      "k": 2
+    },
+    "A5": {
+      "id": "C21",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "B4"
+      },
+      "k": 5
+    },
+    "B5": {
+      "id": "C22",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "B3",
+          "B5"
+        ]
+      },
+      "k": 2
+    },
+    "C5": {
+      "id": "C23",
+      "kind": "DIFFERENT",
+      "cells": [
+        "A4",
+        "E3"
+      ]
+    },
+    "D5": {
+      "id": "C24",
+      "kind": "SAME",
+      "cells": [
+        "D2",
+        "E5"
+      ]
+    },
+    "E5": {
+      "id": "C25",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "A4"
+      },
+      "k": 4
+    }
+  },
+  "initially_revealed": [
+    "C3",
+    "B5"
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "bench_3x3_04_medium",
+  "title": "3x3 Case 04 — Medium",
+  "size": 3,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Engineer"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Baker"
+    },
+    {
+      "cell": "A2",
+      "name": "Duy",
+      "profession": "Chemist"
+    },
+    {
+      "cell": "B2",
+      "name": "Ella",
+      "profession": "Illustrator"
+    },
+    {
+      "cell": "C2",
+      "name": "Finn",
+      "profession": "Architect"
+    },
+    {
+      "cell": "A3",
+      "name": "Gia",
+      "profession": "Guide"
+    },
+    {
+      "cell": "B3",
+      "name": "Hana",
+      "profession": "Historian"
+    },
+    {
+      "cell": "C3",
+      "name": "Iris",
+      "profession": "Florist"
+    }
+  ],
+  "solution": {
+    "A1": true,
+    "B1": false,
+    "C1": true,
+    "A2": false,
+    "B2": false,
+    "C2": false,
+    "A3": true,
+    "B3": false,
+    "C3": false
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "DIFFERENT",
+      "cells": [
+        "A1",
+        "B1"
+      ]
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "A3"
+      },
+      "k": 0
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "COLUMN",
+        "index": 1
+      },
+      "k": 2
+    },
+    "A2": {
+      "id": "C04",
+      "kind": "SAME",
+      "cells": [
+        "A2",
+        "B3"
+      ]
+    },
+    "B2": {
+      "id": "C05",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "ROW",
+        "index": 2
+      },
+      "k": 0
+    },
+    "C2": {
+      "id": "C06",
+      "kind": "DIFFERENT",
+      "cells": [
+        "B2",
+        "C1"
+      ]
+    },
+    "A3": {
+      "id": "C07",
+      "kind": "SAME",
+      "cells": [
+        "B3",
+        "C3"
+      ]
+    },
+    "B3": {
+      "id": "C08",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A2"
+        ]
+      },
+      "k": 1
+    },
+    "C3": {
+      "id": "C09",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "B3"
+      },
+      "k": 2
+    }
+  },
+  "initially_revealed": [
+    "A2"
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "id": "bench_3x3_06_hard",
+  "title": "3x3 Case 06 — Hard",
+  "size": 3,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Historian"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Architect"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "A2",
+      "name": "Duy",
+      "profession": "Florist"
+    },
+    {
+      "cell": "B2",
+      "name": "Ella",
+      "profession": "Illustrator"
+    },
+    {
+      "cell": "C2",
+      "name": "Finn",
+      "profession": "Engineer"
+    },
+    {
+      "cell": "A3",
+      "name": "Gia",
+      "profession": "Guide"
+    },
+    {
+      "cell": "B3",
+      "name": "Hana",
+      "profession": "Chemist"
+    },
+    {
+      "cell": "C3",
+      "name": "Iris",
+      "profession": "Baker"
+    }
+  ],
+  "solution": {
+    "A1": true,
+    "B1": true,
+    "C1": false,
+    "A2": true,
+    "B2": true,
+    "C2": false,
+    "A3": true,
+    "B3": false,
+    "C3": true
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "ROW",
+        "index": 3
+      },
+      "k": 2
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "C3"
+      },
+      "k": 1
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "DIFFERENT",
+      "cells": [
+        "A1",
+        "C1"
+      ]
+    },
+    "A2": {
+      "id": "C04",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C2",
+          "B3"
+        ]
+      },
+      "k": 0
+    },
+    "B2": {
+      "id": "C05",
+      "kind": "SAME",
+      "cells": [
+        "A1",
+        "C3"
+      ]
+    },
+    "C2": {
+      "id": "C06",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "B2"
+      },
+      "k": 5
+    },
+    "A3": {
+      "id": "C07",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A2",
+          "B3"
+        ]
+      },
+      "k": 2
+    },
+    "B3": {
+      "id": "C08",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "B3"
+        ]
+      },
+      "k": 1
+    },
+    "C3": {
+      "id": "C09",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A3",
+          "C3"
+        ]
+      },
+      "k": 3
+    }
+  },
+  "initially_revealed": [
+    "C3"
+  ]
+}

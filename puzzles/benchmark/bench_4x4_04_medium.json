@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "id": "bench_4x4_04_medium",
+  "title": "4x4 Case 04 — Medium",
+  "size": 4,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Optician"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Keeper"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Nurse"
+    },
+    {
+      "cell": "D1",
+      "name": "Duy",
+      "profession": "Architect"
+    },
+    {
+      "cell": "A2",
+      "name": "Ella",
+      "profession": "Pilot"
+    },
+    {
+      "cell": "B2",
+      "name": "Finn",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "C2",
+      "name": "Gia",
+      "profession": "Historian"
+    },
+    {
+      "cell": "D2",
+      "name": "Hana",
+      "profession": "Illustrator"
+    },
+    {
+      "cell": "A3",
+      "name": "Iris",
+      "profession": "Journalist"
+    },
+    {
+      "cell": "B3",
+      "name": "Jude",
+      "profession": "Chemist"
+    },
+    {
+      "cell": "C3",
+      "name": "Kien",
+      "profession": "Engineer"
+    },
+    {
+      "cell": "D3",
+      "name": "Linh",
+      "profession": "Guide"
+    },
+    {
+      "cell": "A4",
+      "name": "Minh",
+      "profession": "Baker"
+    },
+    {
+      "cell": "B4",
+      "name": "Nora",
+      "profession": "Mechanic"
+    },
+    {
+      "cell": "C4",
+      "name": "Omar",
+      "profession": "Florist"
+    },
+    {
+      "cell": "D4",
+      "name": "Phuc",
+      "profession": "Lawyer"
+    }
+  ],
+  "solution": {
+    "A1": false,
+    "B1": false,
+    "C1": false,
+    "D1": true,
+    "A2": false,
+    "B2": false,
+    "C2": true,
+    "D2": true,
+    "A3": false,
+    "B3": false,
+    "C3": false,
+    "D3": true,
+    "A4": true,
+    "B4": false,
+    "C4": true,
+    "D4": true
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "A1"
+      },
+      "k": 0
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "DIFFERENT",
+      "cells": [
+        "D4",
+        "B3"
+      ]
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C4",
+          "D4"
+        ]
+      },
+      "k": 2
+    },
+    "D1": {
+      "id": "C04",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "C1"
+      },
+      "k": 3
+    },
+    "A2": {
+      "id": "C05",
+      "kind": "SAME",
+      "cells": [
+        "A2",
+        "C1"
+      ]
+    },
+    "B2": {
+      "id": "C06",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "ROW",
+        "index": 4
+      },
+      "k": 3
+    },
+    "C2": {
+      "id": "C07",
+      "kind": "SAME",
+      "cells": [
+        "B2",
+        "C3"
+      ]
+    },
+    "D2": {
+      "id": "C08",
+      "kind": "DIFFERENT",
+      "cells": [
+        "B3",
+        "D3"
+      ]
+    },
+    "A3": {
+      "id": "C09",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A2",
+          "C2",
+          "A3"
+        ]
+      },
+      "k": 1
+    },
+    "B3": {
+      "id": "C10",
+      "kind": "SAME",
+      "cells": [
+        "D4",
+        "A4"
+      ]
+    },
+    "C3": {
+      "id": "C11",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "k": 1
+    },
+    "D3": {
+      "id": "C12",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "k": 3
+    },
+    "A4": {
+      "id": "C13",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A2",
+          "B3",
+          "D4"
+        ]
+      },
+      "k": 1
+    },
+    "B4": {
+      "id": "C14",
+      "kind": "DIFFERENT",
+      "cells": [
+        "C4",
+        "A3"
+      ]
+    },
+    "C4": {
+      "id": "C15",
+      "kind": "DIFFERENT",
+      "cells": [
+        "C4",
+        "A1"
+      ]
+    },
+    "D4": {
+      "id": "C16",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "D4"
+        ]
+      },
+      "k": 1
+    }
+  },
+  "initially_revealed": [
+    "D4"
+  ]
+}
