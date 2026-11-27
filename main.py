@@ -1,11 +1,11 @@
-"""Scaffold entry point. --check verifies imports; it does not run the game."""
+"""Application entry point. Use --check to verify contracts without launching GUI."""
 import argparse
 import importlib
 import inspect
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Griductive repository scaffold")
+    parser = argparse.ArgumentParser(description="Griductive Solver")
     parser.add_argument("--check", action="store_true", help="verify scaffold imports only")
     args = parser.parse_args()
     if args.check:
@@ -30,8 +30,9 @@ def main():
                 raise TypeError(f"Contract mismatch: {implementation.__name__}.{method}")
         print(f"OK: {len(modules)} modules import; {len(checks)} API signatures match. No game/GUI implementation.")
     else:
-        print("Repository scaffold only. Read README.md, docs/API.md and your member guide.")
-        print("Algorithms, game behavior and GUI are intentionally left for the team to implement.")
+        from ui.app import run
+
+        run()
 
 
 if __name__ == "__main__":
