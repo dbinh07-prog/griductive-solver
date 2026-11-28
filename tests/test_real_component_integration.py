@@ -1,6 +1,9 @@
 from dataclasses import replace
+import csv
+import json
 import os
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from time import perf_counter, sleep
 import unittest
 from unittest.mock import patch
@@ -137,6 +140,79 @@ class RealComponentIntegrationTests(unittest.TestCase):
                 controller.render(pygame.display.get_surface())
             finally:
                 controller.close()
+
+    def test_selecting_another_cell_clears_previous_verdict_feedback(self):
+        controller = AppController(lambda path: self.make_session(), worker_factory=ImmediateTestJob)
+        self.addCleanup(controller.close)
+        controller.load_case("test_case")
+        controller.update(0)
+        controller.select_cell("B1")
+        controller.submit_verdict("B1", Status.CRIMINAL)
+        self.assertEqual(controller.feedback.kind, "CONTRADICTED")
+        before = controller.public_state
+        controller.select_cell("A2")
+        self.assertIsNone(controller.feedback)
+        self.assertEqual(controller.public_state, before)
+
+    def test_export_dialog_saves_real_trace_and_public_cnf(self):
+        controller = AppController(lambda path: self.make_session(), worker_factory=ImmediateTestJob)
+        self.addCleanup(controller.close)
+        controller.load_case("test_case")
+        controller.update(0)
+        controller.next_step()
+        controller.update(0)
+        scene = controller._scene
+        before = controller.public_state
+        calls = controller.metrics.sat_calls
+        with TemporaryDirectory() as folder:
+            for suffix in ("json", "csv", "cnf"):
+                path = Path(folder) / f"kiểm tra file.{suffix}"
+                controller.toggle_auto()
+                self.assertTrue(controller.auto_running)
+                with patch("scenes.game_scene.choose_file", return_value=str(path)):
+                    if suffix == "cnf":
+                        scene._handle_export_cnf()
+                    else:
+                        scene._handle_export_trace()
+                self.assertFalse(controller.auto_running)
+                self.assertTrue(path.is_file())
+                if suffix == "json":
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    self.assertEqual(data["steps"][0]["cell"], "B1")
+                    self.assertNotIn("solution", data)
+                elif suffix == "csv":
+                    with path.open(encoding="utf-8-sig", newline="") as stream:
+                        rows = list(csv.DictReader(stream))
+                    self.assertEqual(len(rows), 1)
+                    self.assertEqual(rows[0]["cell"], "B1")
+                else:
+                    self.assertIn("p cnf 9 ", path.read_text(encoding="utf-8"))
+        self.assertEqual(controller.public_state, before)
+        self.assertEqual(controller.metrics.sat_calls, calls)
+
+    def test_cancelled_and_failed_dialogs_do_not_replace_active_case(self):
+        from scenes.case_select_scene import CaseSelectScene
+
+        controller = AppController(lambda path: self.make_session(), worker_factory=ImmediateTestJob)
+        self.addCleanup(controller.close)
+        controller.load_case("test_case")
+        controller.update(0)
+        scene = controller._scene
+        before = controller.public_state
+        with patch("scenes.game_scene.choose_file", return_value=""), \
+                patch.object(controller, "export_trace") as export:
+            scene._handle_export_trace()
+            export.assert_not_called()
+        self.assertEqual(scene._export_error, "")
+        selector = CaseSelectScene(controller)
+        with patch("scenes.case_select_scene.choose_file", return_value=""), \
+                patch.object(controller, "load_case") as load:
+            selector.open_file_dialog()
+            load.assert_not_called()
+        with patch("scenes.case_select_scene.choose_file", side_effect=OSError("dialog error")):
+            selector.open_file_dialog()
+        self.assertIn("dialog error", selector._local_error)
+        self.assertEqual(controller.public_state, before)
 
     def test_application_can_render_and_close_twice(self):
         from ui.app import run

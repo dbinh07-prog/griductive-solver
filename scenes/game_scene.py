@@ -9,6 +9,7 @@ from ui.evidence_panel import EvidencePanel
 from ui.inspector_panel import InspectorPanel
 from ui.theme import THEME, compute_game_layout, get_font, truncate_text
 from ui.trace_panel import TracePanel
+from ui.file_dialogs import choose_file
 
 
 _SPEED_CYCLE: tuple[float, ...] = (0.5, 1.0, 2.0)
@@ -108,23 +109,12 @@ class GameScene(BaseScene):
         self.controller.set_auto_speed(next_speed)
 
     def _save_dialog(self, title: str, default_ext: str, filetypes: list[tuple[str, str]]) -> str:
-        root = None
         try:
-            import tkinter as tk
-            from tkinter import filedialog
-
-            root = tk.Tk()
-            root.withdraw()
-            return filedialog.asksaveasfilename(title=title, defaultextension=default_ext, filetypes=filetypes)
+            self.controller.pause()
+            return choose_file(title, filetypes, save=True, default_ext=default_ext)
         except Exception as exc:
             self._export_error = f"Export dialog unavailable: {exc}"
             return ""
-        finally:
-            if root is not None:
-                try:
-                    root.destroy()
-                except Exception:
-                    pass
 
     def _handle_export_trace(self) -> None:
         self._export_error = ""

@@ -244,6 +244,8 @@ class AppController:
             self._start_analysis()
 
     def select_cell(self, cell: str) -> None:
+        if cell != self._selected_cell:
+            self._feedback = None
         self._selected_cell = cell
         if self._public_state is None:
             self._selected_clue_id = None

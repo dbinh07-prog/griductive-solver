@@ -6,6 +6,7 @@ import pygame
 
 from scenes.base_scene import BaseScene, UIButton
 from ui.theme import THEME, draw_avatar_fallback, get_avatar_surface, get_font, truncate_text, wrap_text
+from ui.file_dialogs import choose_file
 
 
 _SIZE_PATTERN = re.compile(r"\b(\d+)\s*[xX]\s*(\d+)\b")
@@ -94,26 +95,13 @@ class CaseSelectScene(BaseScene):
 
     def open_file_dialog(self) -> None:
         selected = ""
-        root = None
         try:
-            import tkinter as tk
-            from tkinter import filedialog
-
-            root = tk.Tk()
-            root.withdraw()
-            selected = filedialog.askopenfilename(
-                title="Select Puzzle JSON",
-                filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            selected = choose_file(
+                "Select Puzzle JSON", [("JSON files", "*.json"), ("All files", "*.*")]
             )
         except Exception as exc:
             self._local_error = f"File dialog unavailable in current environment: {exc}"
             return
-        finally:
-            if root is not None:
-                try:
-                    root.destroy()
-                except Exception:
-                    pass
 
         if selected:
             self._local_error = ""
