@@ -498,6 +498,9 @@ class GUITests(unittest.TestCase):
         self.assertEqual((sess.step_calls, ctrl.trace_entries), (0, ()))
 
         ctrl.submit_verdict("B1", Status.INNOCENT)
+        self.assertEqual((ctrl.selected_clue_id, ctrl.highlighted_cells), (None, ()))
+        ctrl.select_clue("clue_B1")
+        self.assertEqual((ctrl.selected_clue_id, ctrl.highlighted_cells), ("clue_B1", ("B1",)))
         old_job, old_gen = jobs[-1], ctrl._job_generation
         ctrl.restart()
         self.assertTrue(old_job.cancelled)

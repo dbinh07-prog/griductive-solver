@@ -734,18 +734,12 @@ class AppController:
             self._hint_move = None
             self._no_forced_message = None
 
+            self._selected_clue_id = None
+            self._highlighted_cells = ()
             if target_cell is not None:
                 self._animations.trigger_flip(target_cell)
                 play_flip_sound(muted=self._muted)
                 self._selected_cell = target_cell
-                if outcome.revealed_clue is not None:
-                    self._selected_clue_id = outcome.revealed_clue.id
-                    self._highlighted_cells = self._resolve_referenced_cells(
-                        outcome.revealed_clue,
-                        outcome.new_public_state.size,
-                    )
-                else:
-                    self.select_cell(target_cell)
             else:
                 play_flip_sound(muted=self._muted)
 
