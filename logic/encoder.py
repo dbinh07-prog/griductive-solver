@@ -1,4 +1,3 @@
-from __future__ import annotations
 from contracts.models import CNF, Clue, Region, PublicState
 from abc import ABC, abstractmethod
 from core.regions import all_cells, resolve_region, referenced_cells
