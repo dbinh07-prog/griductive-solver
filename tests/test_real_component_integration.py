@@ -20,7 +20,7 @@ from core.puzzle_loader import load_puzzle
 from game.session import GameSession
 from game.factory import create_session
 from ui import theme
-from tests.core_integration_data import CoreTestAgent, ImmediateTestJob
+from tests.core_integration_data import CORE_CLUE_KINDS, CoreTestAgent, ImmediateTestJob
 from tests.member1_data import ErrorAgent
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,12 +65,14 @@ class RealComponentIntegrationTests(unittest.TestCase):
         self.assertEqual(session.metrics().sat_calls, 80)
         self.assertIsNone(session.hint())
 
-    def test_all_benchmark_cases_with_real_dpll_and_engine(self):
+    def test_core_benchmark_cases_with_real_dpll_and_engine(self):
         paths = sorted((ROOT / "puzzles/benchmark").glob("*.json"))
-        self.assertEqual(len(paths), 18)
-        for path in paths:
+        puzzles = [(path, load_puzzle(path)) for path in paths]
+        core_puzzles = [(path, puzzle) for path, puzzle in puzzles
+                        if all(clue.kind in CORE_CLUE_KINDS for _, clue in puzzle.clues)]
+        self.assertTrue(core_puzzles, "Expected benchmark puzzles using the six core clue types")
+        for path, puzzle in core_puzzles:
             with self.subTest(case=path.name):
-                puzzle = load_puzzle(path)
                 agent = CoreTestAgent()
                 full = PublicState(puzzle.id, puzzle.title, puzzle.size, puzzle.characters,
                                    revealed_clues=puzzle.clues)
@@ -79,7 +81,9 @@ class RealComponentIntegrationTests(unittest.TestCase):
                 self.assertEqual(dict(session.public_state().proved_statuses), dict(puzzle.solution))
 
     def test_all_benchmark_cases_with_production_pipeline(self):
-        for path in sorted((ROOT / "puzzles/benchmark").glob("*.json")):
+        paths = sorted((ROOT / "puzzles/benchmark").glob("*.json"))
+        self.assertTrue(paths, "Expected benchmark puzzles")
+        for path in paths:
             with self.subTest(case=path.name):
                 puzzle = load_puzzle(path)
                 session = create_session(str(path))

@@ -1,7 +1,8 @@
 """Test-only six-core adapter. Never used by game.factory or the shipped GUI.
 
-This tests member 1's DPLL/session with the real engine while member 2's
-production encoder and agent are unfinished. It is not a production fallback.
+This independently tests member 1's DPLL/session with the real engine on
+six-core puzzles. Production integration tests also cover extension puzzles.
+It is not a production fallback.
 """
 from itertools import combinations
 from time import perf_counter
@@ -11,12 +12,17 @@ from core.regions import all_cells, referenced_cells
 from tests.member1_data import SampleAgent
 
 
+CORE_CLUE_KINDS = frozenset({"FACT", "SAME", "DIFFERENT", "EXACTLY", "AT_LEAST", "AT_MOST"})
+
+
 class CoreTestEncoder:
     def encode(self, state):
         primary = tuple((c, i + 1) for i, c in enumerate(all_cells(state.size)))
         mapping = dict(primary)
         clauses = []
         for owner, clue in state.revealed_clues:
+            if clue.kind not in CORE_CLUE_KINDS:
+                raise ValueError(f"Core test encoder does not support {clue.kind}")
             cells = referenced_cells(clue, state.size)
             variables = tuple(mapping[c] for c in cells)
             if clue.kind == "FACT":
