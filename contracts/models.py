@@ -134,8 +134,8 @@ class SubmitResult:
 @dataclass(frozen=True)
 class SessionMetrics:
     primary_variables: int = 0
-    auxiliary_variables: int = 0
-    active_clauses: int = 0
+    auxiliary_variables: int | None = None  # None until the current state is analyzed
+    active_clauses: int | None = None
     sat_calls: int = 0
     decisions: int = 0
     propagations: int = 0

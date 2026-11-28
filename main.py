@@ -28,7 +28,7 @@ def main():
         for implementation, port, method in checks:
             if inspect.signature(getattr(implementation, method)) != inspect.signature(getattr(port, method)):
                 raise TypeError(f"Contract mismatch: {implementation.__name__}.{method}")
-        print(f"OK: {len(modules)} modules import; {len(checks)} API signatures match. No game/GUI implementation.")
+        print(f"OK: {len(modules)} modules import; {len(checks)} API signatures match. See README for backend readiness.")
     else:
         from ui.app import run
 

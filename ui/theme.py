@@ -80,6 +80,14 @@ avatar_paths_cache: dict[Path | None, tuple[Path, ...]] = {}
 avatar_raw_cache: dict[Path, pygame.Surface] = {}
 avatar_scaled_cache: dict[tuple[Path, int], pygame.Surface] = {}
 sound_cache: dict[Path, pygame.mixer.Sound] = {}
+
+
+def reset_runtime_caches() -> None:
+    """Drop SDL resources before shutdown/reinitialization of the application."""
+    font_cache.clear()
+    sound_cache.clear()
+    avatar_raw_cache.clear()
+    avatar_scaled_cache.clear()
 mixer_failed = False
 
 

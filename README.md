@@ -1,13 +1,15 @@
-# Griductive Solver — bộ khung làm việc nhóm
+# Griductive Solver
 
-**Đây là khung sườn để nhóm tự code, không phải game hoàn chỉnh.** Thuật toán, luật chơi, GUI, kiểm thử và benchmark chưa được triển khai. Các hàm nghiệp vụ cố ý để `NotImplementedError`. Dataclass/enum chỉ chốt kiểu dữ liệu chung.
+**Trạng thái tích hợp:** đã ghép GUI từ `feat/gui`, engine/loader/evaluator/dataset/runner từ `feature/engine-and-experiment`, code hiện có trên `main` và phần người 1 (DPLL, session, worker, factory). Các entry point thật được giữ nguyên, không thay bằng fixture trong test.
+
+**Phần còn thiếu trên các commit hiện có:** `CNFEncoder.validate_clue`, `CNFEncoder.encode`, `LogicAgent.analyze`, `LogicAgent.check_uniqueness` và các extensions Nhân đang làm. Main hiện mới có strategy FACT/SAME; nhánh GUI có `next_forced`. Menu/GUI và loader chạy được, nhưng suy luận/Auto Solve/benchmark production còn báo lỗi backend chưa triển khai. Không coi các test dùng adapter là bằng chứng backend này đã hoàn thành.
 
 ## Phân công 5 người
 
 | Thành viên | File/folder làm chính | Công việc |
 |---|---|---|
 | **1 — Leader** | `algorithms/dpll.py`, `game/session.py`, `game/worker.py`, `contracts/`, `docs/API.md` | DPLL SAT Solver, kiến trúc, ghép engine–encoder–agent–GUI, trace và thống kê tích hợp. **Không tổng hợp report.** |
-| **2 — Logic ** | `logic/encoder.py`, `logic/agent.py` | CNF encoder, tự tìm hiểu và chọn ít nhất hai extensions khác nhau theo đề, Logic Agent, entailment, uniqueness. |
+| **2 — Logic (Nhân)** | `logic/encoder.py`, `logic/agent.py` | CNF encoder, tự tìm hiểu và chọn ít nhất hai extensions khác nhau theo đề, Logic Agent, entailment, uniqueness. |
 | **3 — Engine và thực nghiệm** | `core/`, `validation/`, `puzzles/`, `experiments/`, `run_experiments.py` | Game Engine, loader, regions, dataset, semantic evaluator độc lập, kiểm tra puzzle và chạy benchmark. |
 | **4 — GUI** | `main.py`, `app_controller.py`, `scenes/`, `ui/`, `assets/`, `requirements.txt` | Tự thiết kế và code toàn bộ giao diện, điều khiển, highlight clue, animation và bảng kết quả. |
 | **5 — Tài liệu, không code** | `docs/QA.md`, `report/`, hướng dẫn chơi/chạy trong README | Tổng hợp report, kiểm thử thủ công, ghi lỗi, kịch bản/quay/dựng video, kiểm tra gói nộp. **Không chạy benchmark.** |
@@ -65,13 +67,14 @@ Luồng ghép: **GUI → GameSession → LogicAgent → CNFEncoder → DPLLSolve
 Dùng Python **3.11 trở lên**, nhóm nên thống nhất Python 3.12. Mở terminal ở thư mục có `main.py`:
 
 ```powershell
+python -m pip install -r requirements.txt
 python main.py --check
 python main.py
 ```
 
-Lệnh đầu chỉ kiểm tra import/chữ ký phụ thuộc, **không kiểm tra thuật toán**. Lệnh thứ hai chỉ thông báo đây là scaffold, không mở game. Nếu máy chưa có lệnh `python`, cài Python chuẩn hoặc chọn đúng interpreter có sẵn. Không ghi đường dẫn riêng của một máy vào repo.
+Lệnh cài thư viện lấy Pygame theo requirements. `--check` chỉ kiểm tra import/chữ ký, **không chứng minh backend đã hoàn thành**. `python main.py` mở GUI đã ghép. Nếu máy chưa có lệnh `python`, cài Python chuẩn hoặc chọn đúng interpreter có sẵn. Không ghi đường dẫn riêng của một máy vào repo.
 
-`requirements.txt` chưa cần thư viện ngoài. Người 4 chọn và khóa phiên bản GUI sau. Môi trường ảo, `.env`, cache và file tạm chỉ giữ ở máy cá nhân; `.gitignore` loại chúng khỏi repo.
+`requirements.txt` đã khóa `pygame==2.6.1` theo nhánh GUI. Môi trường ảo, `.env`, cache và file tạm chỉ giữ ở máy cá nhân; `.gitignore` loại chúng khỏi repo.
 
 ## Sau khi nhóm tự triển khai
 
@@ -82,7 +85,17 @@ python main.py
 python run_experiments.py
 ```
 
-Hiện test chỉ là khung và được skip có chủ đích; **skip không chứng minh chương trình đúng**. Mỗi người viết nội dung rồi bỏ `@unittest.skip` ở file của mình. Game và benchmark chỉ chạy sau khi nhóm hoàn thiện phần triển khai và nối entry point.
+Test DPLL, session, worker, factory, engine, loader, semantics và GUI đã ghép. Test encoder/agent/extensions chưa triển khai vẫn skip có chủ đích; **skip không chứng minh chương trình đúng**. Người phụ trách viết nội dung rồi bỏ skip khi phần tương ứng hoàn thành.
+
+Kiểm tra riêng phần người 1:
+
+```powershell
+python -m unittest tests.test_dpll tests.test_integration tests.test_worker tests.test_factory -v
+```
+
+`tests/member1_data.py` là fixture nhỏ chỉ hỗ trợ FACT, phục vụ kiểm tra tích hợp với DPLL thật; không phải encoder/agent/engine hoàn chỉnh để nộp bài. `create_session` luôn nối module thật và báo lỗi nếu phần phụ thuộc chưa triển khai, không tự chuyển sang fixture.
+
+`tests/core_integration_data.py` là adapter sáu core chỉ dùng trong test, để kiểm tra DPLL/session với engine thật trên 18 puzzle 3x3/4x4/5x5 trong khi encoder/agent production chưa xong. `tests/test_real_component_integration.py` kiểm tra thêm việc GUI nhận Analysis của worker vào cache session, không chạy SAT lần hai khi Hint/Submit. Không đưa adapter này vào `game.factory` hoặc script thực nghiệm.
 
 ## Mốc tích hợp
 
@@ -94,5 +107,9 @@ Hiện test chỉ là khung và được skip có chủ đích; **skip không ch
 
 Không đợi gần hạn mới ghép. Mỗi PR tập trung vào module của mình; sửa API phải cập nhật docs cùng lúc.
 
+## Tham khảo và nộp bài
+
+- Cách tổ chức scaffold dựa trên ZIP Bloxorz mà nhóm cung cấp (commit `467598f61060871e68397da4e7fbc3092cdb460e`).
+- Đã xem repo Griductive mẫu tại [TranTai35/griductive-solver](https://github.com/TranTai35/griductive-solver), mốc `52c8a4d09a6ac15f13d76b03f58413e6c800afee`. Bộ khung này không chép phần triển khai game/thuật toán/GUI của repo đó.
 - Yêu cầu chính lấy từ đề Griductive do nhóm cung cấp; bảng đối chiếu nằm trong `docs/REQUIREMENTS.md`.
 - Người 5 xem [checklist nộp bài](report/SUBMISSION.md). Ghi nguồn tham khảo và cách dùng AI/prompts thực tế trong phụ lục; không tự tạo kết quả hoặc khai là chưa dùng nếu đã dùng.

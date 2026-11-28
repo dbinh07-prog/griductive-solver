@@ -667,6 +667,17 @@ class AppController:
         if result.puzzle_id != self._public_state.puzzle_id or result.revision != self._public_state.revision:
             return
 
+        accept_analysis = getattr(self._session, "accept_analysis", None)
+        if callable(accept_analysis):
+            try:
+                result = accept_analysis(result)
+            except Exception as exc:
+                self.pause()
+                self._terminal_state = TerminalState.ERROR
+                self._status_message = f"Invalid analysis result: {exc}"
+                self._feedback = FeedbackMessage("ERROR", "Analysis Error", self._status_message)
+                return
+
         self._analysis = result
         proved = {c for c, _ in self._public_state.proved_statuses}
         has_forced = any(

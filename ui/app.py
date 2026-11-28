@@ -3,6 +3,7 @@ import pygame
 
 from app_controller import AppController
 from game.factory import create_session
+from ui.theme import reset_runtime_caches
 
 
 DEFAULT_WINDOW_SIZE = (1280, 720)
@@ -12,16 +13,16 @@ MIN_WINDOW_SIZE = (960, 600)
 def run(session_factory=None) -> None:
     """Launch the resizable 60 FPS Pygame application loop."""
     factory = session_factory or create_session
+    reset_runtime_caches()
     pygame.init()
-    screen = pygame.display.set_mode(DEFAULT_WINDOW_SIZE, pygame.RESIZABLE)
-    pygame.display.set_caption("Griductive Solver")
-    clock = pygame.time.Clock()
-
-    controller = AppController(factory)
-    controller.show_menu()
-    controller.on_resize(*screen.get_size())
-
+    controller = None
     try:
+        screen = pygame.display.set_mode(DEFAULT_WINDOW_SIZE, pygame.RESIZABLE)
+        pygame.display.set_caption("Griductive Solver")
+        clock = pygame.time.Clock()
+        controller = AppController(factory)
+        controller.show_menu()
+        controller.on_resize(*screen.get_size())
         while not controller.should_quit:
             dt = min(0.1, clock.tick(60) / 1000.0)
             for event in pygame.event.get():
@@ -46,5 +47,7 @@ def run(session_factory=None) -> None:
             controller.render(screen)
             pygame.display.flip()
     finally:
-        controller.close()
+        if controller is not None:
+            controller.close()
+        reset_runtime_caches()
         pygame.quit()

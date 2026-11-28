@@ -2,9 +2,19 @@
 
 **Người 1 phụ trách DPLL, không tổng hợp report.** Logic Agent thuộc người 2; lỗi của từng module do người sở hữu module đó sửa.
 
+## Phần đã triển khai
+
+- `DPLLSolver`: validation, unit propagation, conflict, nhánh xác định, backtrack, assumptions tạm, complete model, timeout và counters.
+- `GameSession`: phân tích public state, cache, Hint/Step/Submit, chống reveal không được chứng minh, trace JSON/CSV, metrics và restart.
+- `AnalysisJob`: process nền spawn, poll/cancel, deadline và truyền lỗi; session có wrapper quản lý job và loại kết quả cũ.
+- `create_session`: ghép loader/engine/encoder/DPLL/agent thật, không có fallback sang fixture.
+- Test DPLL đối chiếu vét cạn trên CNF nhỏ; test session/worker/factory với fixture có ghi rõ phạm vi. Game hoàn chỉnh vẫn chờ các module của thành viên khác.
+
 ## File chính
 
 `algorithms/dpll.py`, `game/session.py`, `game/worker.py`, `game/factory.py`, `contracts/`, `docs/API.md`, `tests/test_dpll.py`, `tests/test_integration.py`.
+
+Kiểm thử bổ sung ở `tests/test_worker.py`, `tests/test_factory.py`; `tests/member1_data.py` chỉ phục vụ test. Người 4 xem mục session/worker trong API để dùng `start_analysis`, `poll_analysis`, `cancel_analysis`.
 
 ## Thứ tự tự triển khai
 

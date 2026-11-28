@@ -302,8 +302,8 @@ class TracePanel:
         m = self._metrics
         items = (
             ("Primary Variables", str(m.primary_variables)),
-            ("Auxiliary Variables", str(m.auxiliary_variables)),
-            ("Active Clauses", str(m.active_clauses)),
+            ("Auxiliary Variables", "--" if m.auxiliary_variables is None else str(m.auxiliary_variables)),
+            ("Active Clauses", "--" if m.active_clauses is None else str(m.active_clauses)),
             ("SAT Calls", str(m.sat_calls)),
             ("Decisions", str(m.decisions)),
             ("Propagations", str(m.propagations)),
