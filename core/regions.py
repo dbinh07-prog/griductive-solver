@@ -2,6 +2,7 @@ from contracts.models import Clue, Region
 
 _BINARY_KINDS = frozenset({"SAME", "DIFFERENT"})
 _COUNTING_KINDS = frozenset({"EXACTLY", "AT_LEAST", "AT_MOST"})
+_COMPARE_RELATIONS = frozenset({"EQ", "LT", "GT"})
 
 
 def _is_strict_int(value : object) -> bool:
@@ -155,9 +156,11 @@ def referenced_cells(clue: Clue, size: int) -> tuple[str, ...]:
         raise ValueError(f"Expected Clue instance, got {type(clue).__name__}")
 
     if clue.kind == "COUNT_COMPARE":
-        if clue.cells != () or clue.status is not True or type(clue.k) is not int or clue.k != 0:
+        if clue.cells != () or clue.status is not True or not _is_strict_int(clue.k) or clue.k != 0:
             raise ValueError("COUNT_COMPARE requires default cells, status and k")
-        if not isinstance(clue.relation, str) or clue.relation not in ("EQ", "LT", "GT"):
+        if clue.region is None or clue.other_region is None:
+            raise ValueError("COUNT_COMPARE clue requires both region and other_region")
+        if not isinstance(clue.relation, str) or clue.relation not in _COMPARE_RELATIONS:
             raise ValueError("COUNT_COMPARE relation must be EQ, LT or GT")
         left = resolve_region(clue.region, size)
         right = resolve_region(clue.other_region, size)
@@ -170,7 +173,9 @@ def referenced_cells(clue: Clue, size: int) -> tuple[str, ...]:
     if clue.kind == "PARITY":
         if clue.cells != () or clue.status is not True:
             raise ValueError("PARITY requires default cells and status")
-        if type(clue.k) is not int or clue.k not in (0, 1):
+        if clue.region is None:
+            raise ValueError("PARITY clue requires a region")
+        if not _is_strict_int(clue.k) or clue.k not in (0, 1):
             raise ValueError("PARITY k must be 0 (even) or 1 (odd)")
         return resolve_region(clue.region, size)
 
@@ -182,8 +187,14 @@ def referenced_cells(clue: Clue, size: int) -> tuple[str, ...]:
         if not isinstance(clue.status, bool):
             raise ValueError(f"FACT status must be a bool, got {clue.status!r}")
         
-        if clue.region is not None or not _is_strict_int(clue.k) or clue.k != 0:
-            raise ValueError(f"FACT clue must not set region or k: {clue!r}")
+        if (
+            clue.region is not None
+            or not _is_strict_int(clue.k)
+            or clue.k != 0
+        ):
+            raise ValueError(
+                f"FACT clue must not set region or k: {clue!r}"
+            )
         
         _parse_cell(clue.cells[0], size)
         
@@ -196,8 +207,14 @@ def referenced_cells(clue: Clue, size: int) -> tuple[str, ...]:
                 f"{clue.kind} clue requires exactly 2 cells, got {clue.cells!r}"
             )
         
-        if clue.region is not None or not _is_strict_int(clue.k) or clue.k != 0:
-            raise ValueError(f"{clue.kind} clue must not set region or k: {clue!r}")
+        if (
+            clue.region is not None
+            or not _is_strict_int(clue.k)
+            or clue.k != 0
+        ):
+            raise ValueError(
+                f"{clue.kind} clue must not set region or k: {clue!r}"
+            )
         
         if clue.status is not True:
             raise ValueError(f"{clue.kind} clue must keep default status=True: {clue!r}")

@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "id": "bench_4x4_07_ext_mixed",
+  "title": "4x4 Case 07 \u2014 Extension Mixed",
+  "size": 4,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Engineer"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Historian"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Keeper"
+    },
+    {
+      "cell": "D1",
+      "name": "Duy",
+      "profession": "Nurse"
+    },
+    {
+      "cell": "A2",
+      "name": "Ella",
+      "profession": "Ranger"
+    },
+    {
+      "cell": "B2",
+      "name": "Finn",
+      "profession": "Tailor"
+    },
+    {
+      "cell": "C2",
+      "name": "Gia",
+      "profession": "Vet"
+    },
+    {
+      "cell": "D2",
+      "name": "Hana",
+      "profession": "Architect"
+    },
+    {
+      "cell": "A3",
+      "name": "Iris",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "B3",
+      "name": "Jude",
+      "profession": "Guide"
+    },
+    {
+      "cell": "C3",
+      "name": "Kien",
+      "profession": "Journalist"
+    },
+    {
+      "cell": "D3",
+      "name": "Linh",
+      "profession": "Mechanic"
+    },
+    {
+      "cell": "A4",
+      "name": "Minh",
+      "profession": "Pilot"
+    },
+    {
+      "cell": "B4",
+      "name": "Nora",
+      "profession": "Sculptor"
+    },
+    {
+      "cell": "C4",
+      "name": "Omar",
+      "profession": "Umpire"
+    },
+    {
+      "cell": "D4",
+      "name": "Phuc",
+      "profession": "Writer"
+    }
+  ],
+  "solution": {
+    "A1": true,
+    "B1": false,
+    "C1": true,
+    "D1": false,
+    "A2": false,
+    "B2": true,
+    "C2": true,
+    "D2": false,
+    "A3": true,
+    "B3": true,
+    "C3": false,
+    "D3": true,
+    "A4": false,
+    "B4": false,
+    "C4": true,
+    "D4": false
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "B1"
+        ]
+      },
+      "k": 1
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "C1"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1"
+        ]
+      },
+      "relation": "GT"
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "PARITY",
+      "region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "k": 0
+    },
+    "D1": {
+      "id": "C04",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "D1",
+          "C2"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "C1"
+        ]
+      },
+      "relation": "EQ"
+    },
+    "A2": {
+      "id": "C07",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 2
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C2",
+          "D2"
+        ]
+      },
+      "relation": "GT"
+    },
+    "B2": {
+      "id": "C08",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "B2",
+          "B3"
+        ]
+      },
+      "k": 0
+    },
+    "C2": {
+      "id": "C05",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C1",
+          "C2",
+          "D2"
+        ]
+      },
+      "k": 0
+    },
+    "D2": {
+      "id": "C06",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A2",
+          "B1"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1",
+          "D2"
+        ]
+      },
+      "relation": "EQ"
+    },
+    "A3": {
+      "id": "C10",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A3",
+          "B3",
+          "C3"
+        ]
+      },
+      "k": 0
+    },
+    "B3": {
+      "id": "C09",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "COLUMN",
+        "index": 1
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A2",
+          "A4"
+        ]
+      },
+      "relation": "GT"
+    },
+    "C3": {
+      "id": "C11",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "ROW",
+        "index": 3
+      },
+      "k": 3
+    },
+    "D3": {
+      "id": "C12",
+      "kind": "PARITY",
+      "region": {
+        "kind": "COLUMN",
+        "index": 4
+      },
+      "k": 1
+    },
+    "A4": {
+      "id": "C14",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "k": 3
+    },
+    "B4": {
+      "id": "C15",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "D1",
+          "D2"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A3"
+        ]
+      },
+      "relation": "LT"
+    },
+    "C4": {
+      "id": "C16",
+      "kind": "PARITY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "A1"
+      },
+      "k": 1
+    },
+    "D4": {
+      "id": "C13",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 4
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C4"
+        ]
+      },
+      "relation": "EQ"
+    }
+  },
+  "initially_revealed": [
+    "A1"
+  ]
+}

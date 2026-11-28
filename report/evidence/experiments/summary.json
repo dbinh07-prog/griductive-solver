@@ -1,0 +1,113 @@
+{
+  "total_rows": 66,
+  "groups": {
+    "dpll_baseline|size=3": {
+      "total_runs": 30,
+      "status_counts": {
+        "SOLVED": 30
+      },
+      "solved_play_runtime_ms": {
+        "mean": 5.52,
+        "median": 4.098,
+        "max": 12.784
+      },
+      "solved_sat_calls": {
+        "mean": 76.6,
+        "median": 80.0,
+        "max": 80.0
+      },
+      "solved_decisions": {
+        "mean": 1.3,
+        "median": 0.0,
+        "max": 6.0
+      },
+      "solved_propagations": {
+        "mean": 414.2,
+        "median": 410.5,
+        "max": 462.0
+      },
+      "solved_backtracks": {
+        "mean": 0.3,
+        "median": 0.0,
+        "max": 2.0
+      },
+      "solved_deduction_steps": {
+        "mean": 7.8,
+        "median": 8.0,
+        "max": 8.0
+      }
+    },
+    "dpll_baseline|size=4": {
+      "total_runs": 24,
+      "status_counts": {
+        "SOLVED": 24
+      },
+      "solved_play_runtime_ms": {
+        "mean": 25.336,
+        "median": 24.834,
+        "max": 39.347
+      },
+      "solved_sat_calls": {
+        "mean": 243.375,
+        "median": 255.0,
+        "max": 255.0
+      },
+      "solved_decisions": {
+        "mean": 12.25,
+        "median": 0.0,
+        "max": 49.0
+      },
+      "solved_propagations": {
+        "mean": 2002.375,
+        "median": 1969.0,
+        "max": 2203.0
+      },
+      "solved_backtracks": {
+        "mean": 4.25,
+        "median": 0.0,
+        "max": 19.0
+      },
+      "solved_deduction_steps": {
+        "mean": 14.625,
+        "median": 15.0,
+        "max": 15.0
+      }
+    },
+    "dpll_baseline|size=5": {
+      "total_runs": 12,
+      "status_counts": {
+        "SOLVED": 12
+      },
+      "solved_play_runtime_ms": {
+        "mean": 83.001,
+        "median": 85.065,
+        "max": 98.905
+      },
+      "solved_sat_calls": {
+        "mean": 587.25,
+        "median": 575.0,
+        "max": 624.0
+      },
+      "solved_decisions": {
+        "mean": 59.25,
+        "median": 48.0,
+        "max": 114.0
+      },
+      "solved_propagations": {
+        "mean": 6991.75,
+        "median": 6983.0,
+        "max": 7073.0
+      },
+      "solved_backtracks": {
+        "mean": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "solved_deduction_steps": {
+        "mean": 23.25,
+        "median": 23.0,
+        "max": 24.0
+      }
+    }
+  }
+}

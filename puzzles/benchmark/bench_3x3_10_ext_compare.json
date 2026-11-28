@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "id": "bench_3x3_10_ext_compare",
+  "title": "3x3 Case 10 \u2014 Extension Count Compare",
+  "size": 3,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Guide"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Journalist"
+    },
+    {
+      "cell": "A2",
+      "name": "Duy",
+      "profession": "Mechanic"
+    },
+    {
+      "cell": "B2",
+      "name": "Ella",
+      "profession": "Pilot"
+    },
+    {
+      "cell": "C2",
+      "name": "Finn",
+      "profession": "Sculptor"
+    },
+    {
+      "cell": "A3",
+      "name": "Gia",
+      "profession": "Umpire"
+    },
+    {
+      "cell": "B3",
+      "name": "Hana",
+      "profession": "Writer"
+    },
+    {
+      "cell": "C3",
+      "name": "Iris",
+      "profession": "Chemist"
+    }
+  ],
+  "solution": {
+    "A1": false,
+    "B1": true,
+    "C1": true,
+    "A2": true,
+    "B2": false,
+    "C2": false,
+    "A3": false,
+    "B3": true,
+    "C3": false
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "B1"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1"
+        ]
+      },
+      "relation": "GT"
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1"
+        ]
+      },
+      "relation": "GT"
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C1",
+          "A2"
+        ]
+      },
+      "k": 0
+    },
+    "A2": {
+      "id": "C04",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "COLUMN",
+        "index": 1
+      },
+      "other_region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "relation": "LT"
+    },
+    "B2": {
+      "id": "C06",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 3
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A3",
+          "C3"
+        ]
+      },
+      "relation": "GT"
+    },
+    "C2": {
+      "id": "C07",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 2
+      },
+      "other_region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "relation": "EQ"
+    },
+    "A3": {
+      "id": "C05",
+      "kind": "AT_MOST",
+      "region": {
+        "kind": "ROW",
+        "index": 2
+      },
+      "k": 1
+    },
+    "B3": {
+      "id": "C08",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "A3",
+          "C3"
+        ]
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B1"
+        ]
+      },
+      "relation": "LT"
+    },
+    "C3": {
+      "id": "C09",
+      "kind": "PARITY",
+      "region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "k": 1
+    }
+  },
+  "initially_revealed": [
+    "A1"
+  ]
+}

@@ -42,17 +42,22 @@ def evaluate_clue(clue: Clue, assignment: dict[str, bool], size: int) -> bool:
         return assignment[a] != assignment[b]
 
     if clue.kind == "PARITY":
+        assert clue.region is not None
         cells = resolve_region(clue.region, size)
-        return sum(assignment[cell] for cell in cells) % 2 == clue.k
+        criminal_count = sum(1 for cell in cells if assignment[cell])
+        return criminal_count % 2 == clue.k
 
     if clue.kind == "COUNT_COMPARE":
-        left = sum(assignment[cell] for cell in resolve_region(clue.region, size))
-        right = sum(assignment[cell] for cell in resolve_region(clue.other_region, size))
+        assert clue.region is not None and clue.other_region is not None
+        left_count = sum(1 for cell in resolve_region(clue.region, size) if assignment[cell])
+        right_count = sum(1 for cell in resolve_region(clue.other_region, size) if assignment[cell])
         if clue.relation == "EQ":
-            return left == right
+            return left_count == right_count
         if clue.relation == "LT":
-            return left < right
-        return left > right
+            return left_count < right_count
+        if clue.relation == "GT":
+            return left_count > right_count
+        raise ValueError(f"Unsupported COUNT_COMPARE relation: {clue.relation!r}")
     
     if clue.kind in ("EXACTLY", "AT_LEAST", "AT_MOST"):
         
@@ -69,5 +74,5 @@ def evaluate_clue(clue: Clue, assignment: dict[str, bool], size: int) -> bool:
         
         if clue.kind == "AT_MOST":
             return criminal_count <= clue.k
-        
+
     raise ValueError(f"Unsupported clue kind: {clue.kind!r}")

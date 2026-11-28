@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "id": "bench_3x3_09_ext_parity",
+  "title": "3x3 Case 09 \u2014 Extension Parity",
+  "size": 3,
+  "characters": [
+    {
+      "cell": "A1",
+      "name": "Ada",
+      "profession": "Doctor"
+    },
+    {
+      "cell": "B1",
+      "name": "Bao",
+      "profession": "Guide"
+    },
+    {
+      "cell": "C1",
+      "name": "Chi",
+      "profession": "Journalist"
+    },
+    {
+      "cell": "A2",
+      "name": "Duy",
+      "profession": "Mechanic"
+    },
+    {
+      "cell": "B2",
+      "name": "Ella",
+      "profession": "Pilot"
+    },
+    {
+      "cell": "C2",
+      "name": "Finn",
+      "profession": "Sculptor"
+    },
+    {
+      "cell": "A3",
+      "name": "Gia",
+      "profession": "Umpire"
+    },
+    {
+      "cell": "B3",
+      "name": "Hana",
+      "profession": "Writer"
+    },
+    {
+      "cell": "C3",
+      "name": "Iris",
+      "profession": "Chemist"
+    }
+  ],
+  "solution": {
+    "A1": true,
+    "B1": false,
+    "C1": true,
+    "A2": false,
+    "B2": true,
+    "C2": true,
+    "A3": true,
+    "B3": false,
+    "C3": false
+  },
+  "clues": {
+    "A1": {
+      "id": "C01",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "A1",
+          "B1"
+        ]
+      },
+      "k": 1
+    },
+    "B1": {
+      "id": "C02",
+      "kind": "PARITY",
+      "region": {
+        "kind": "ROW",
+        "index": 1
+      },
+      "k": 0
+    },
+    "C1": {
+      "id": "C03",
+      "kind": "PARITY",
+      "region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "C1",
+          "A2"
+        ]
+      },
+      "k": 1
+    },
+    "A2": {
+      "id": "C04",
+      "kind": "AT_LEAST",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "A1"
+      },
+      "k": 1
+    },
+    "B2": {
+      "id": "C05",
+      "kind": "SAME",
+      "cells": [
+        "B2",
+        "C2"
+      ]
+    },
+    "C2": {
+      "id": "C06",
+      "kind": "PARITY",
+      "region": {
+        "kind": "COLUMN",
+        "index": 3
+      },
+      "k": 0
+    },
+    "A3": {
+      "id": "C07",
+      "kind": "EXACTLY",
+      "region": {
+        "kind": "ROW",
+        "index": 3
+      },
+      "k": 1
+    },
+    "B3": {
+      "id": "C08",
+      "kind": "PARITY",
+      "region": {
+        "kind": "NEIGHBORS",
+        "anchor": "C1"
+      },
+      "k": 0
+    },
+    "C3": {
+      "id": "C09",
+      "kind": "COUNT_COMPARE",
+      "region": {
+        "kind": "ROW",
+        "index": 3
+      },
+      "other_region": {
+        "kind": "EXPLICIT",
+        "cells": [
+          "B3",
+          "C3"
+        ]
+      },
+      "relation": "GT"
+    }
+  },
+  "initially_revealed": [
+    "A1"
+  ]
+}
