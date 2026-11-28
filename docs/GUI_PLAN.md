@@ -33,7 +33,7 @@ Phong cách gợi ý: bàn hồ sơ điều tra 2D, nền sáng dịu, chữ t�
 - Card luôn có tọa độ, tên và nghề. Face-down không có clue/status ẩn; đã mở thể hiện status và có cách đọc clue ngay trên card hoặc evidence panel.
 - Board 3x3/4x4 đọc được ở cửa sổ laptop; 5x5 nếu làm phải có scaling/zoom hoặc card gọn + detail panel. Không thu chữ đến mức không đọc được.
 - Evidence panel hiển thị **mọi clue đã mở**, có scroll; highlight khớp `referenced_cells` cho sáu core và các extensions Nhân thực sự chọn.
-- Extensions chưa chốt nên phần hiển thị tương ứng sẽ bổ sung sau khi Nhân thống nhất ngữ nghĩa/API. Ví dụ nếu chọn COUNT_COMPARE thì phân biệt hai vùng trái/phải và ô giao; đây chỉ là gợi ý có điều kiện. Không hiện thông tin bí mật từ solution để minh họa clue.
+- Extensions hiện gồm PARITY và COUNT_COMPARE. Text COUNT_COMPARE ghi riêng hai vùng; board highlight hợp hai vùng. Tô màu riêng hai vế/ô giao là cải tiến hiển thị còn có thể bổ sung. Không hiện thông tin bí mật từ solution để minh họa clue.
 - Chọn thẻ chưa mở → hiện nút Criminal/Innocent; người chơi tự quyết định. Không tự bật verdict chỉ vì đáp án private nói đúng.
 - NOT_PROVABLE: chưa có bằng chứng ép verdict. CONTRADICTED: đã chứng minh opposite. Hai thông báo khác nhau; card không flip.
 - Hint chọn được một forced character, không thêm status/clue. Nếu chưa có forced move thì nói thiếu dữ kiện.

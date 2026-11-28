@@ -22,6 +22,12 @@ class Uniqueness(str, Enum):
     INCONSISTENT = "INCONSISTENT"
 
 
+class Relation(str, Enum):
+    EQ = "EQ"
+    GT = "GT"
+    LT = "LT"
+
+
 class SolverTimeout(TimeoutError):
     """Timeout is not UNSAT and must never justify a verdict."""
 
@@ -44,11 +50,13 @@ class Region:
 @dataclass(frozen=True)
 class Clue:
     id: str
-    kind: str  # Six core templates; member 2 selects and specifies extensions later.
+    kind: str  # Six core templates plus PARITY and COUNT_COMPARE selected by member 2.
     cells: tuple[str, ...] = ()  # FACT: 1; binary templates: 2
     status: bool = True  # FACT: True = Criminal
-    region: Region | None = None  # core counting clues
-    k: int = 0  # core count; extension-specific fields are not frozen yet
+    region: Region | None = None  # counting/PARITY; left side of COUNT_COMPARE
+    k: int = 0  # count; PARITY uses 0=even, 1=odd
+    other_region: Region | None = None
+    relation: Relation | str | None = None
 
 
 @dataclass(frozen=True)
@@ -134,8 +142,8 @@ class SubmitResult:
 @dataclass(frozen=True)
 class SessionMetrics:
     primary_variables: int = 0
-    auxiliary_variables: int = 0
-    active_clauses: int = 0
+    auxiliary_variables: int | None = None  # None until the current state is analyzed
+    active_clauses: int | None = None
     sat_calls: int = 0
     decisions: int = 0
     propagations: int = 0

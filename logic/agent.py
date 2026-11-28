@@ -1,18 +1,18 @@
 from contracts.models import Analysis, PublicState, Status, Uniqueness, SATQuery, SolverStats, SolverTimeout, CNF
 from contracts.ports import Encoder, Solver
 import time
+import math
 
 class LogicAgent:
     def __init__(self, encoder: Encoder, solver: Solver):
         self.encoder = encoder
         self.solver = solver
 
-    def analyze(self, public_state: PublicState, *, timeout_s: float | int = 5.0) -> Analysis:
+    def analyze(self, public_state: PublicState, *, timeout_s: float = 5.0) -> Analysis:
         if not isinstance(public_state, PublicState):
             raise ValueError("Public State cannot be processed as wrong datatype")
         
-        if not isinstance(timeout_s, (float, int)) or isinstance(timeout_s, bool) or timeout_s <= 0:
-            raise ValueError("Timeout must be a positive float or int")
+        self._check_timeout(timeout_s)
         
         deadline = time.monotonic() + float(timeout_s)
 
@@ -112,8 +112,9 @@ class LogicAgent:
 
         if not isinstance(full_clue_state, PublicState):
             raise ValueError("Full clue state must be a PublicState Datatype")
-        if not isinstance(timeout_s, float) or timeout_s <= 0:
-            raise ValueError("Timeout_s must be a positive float")
+        self._check_timeout(timeout_s)
+        if full_clue_state.proved_statuses:
+            raise ValueError("Uniqueness must use clues without hidden solution units")
         
         deadline = time.monotonic() + float(timeout_s)
         cnf = self.encoder.encode(full_clue_state)
@@ -144,4 +145,10 @@ class LogicAgent:
         second = self.solver.solve(blocked_cnf, assumptions = (), timeout_s = remaining)
 
         return Uniqueness.MULTIPLE if second.satisfiable else Uniqueness.UNIQUE
+
+    def _check_timeout(self, timeout_s):
+        if type(timeout_s) not in (int, float) or not math.isfinite(timeout_s):
+            raise ValueError("Timeout must be a finite number")
+        if timeout_s <= 0:
+            raise SolverTimeout("Timeout")
     

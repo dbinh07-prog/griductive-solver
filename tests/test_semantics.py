@@ -1,7 +1,6 @@
 """Unit tests for core.regions and validation.semantics."""
 
 import ast
-from dataclasses import dataclass, fields as dataclass_fields
 import itertools
 from pathlib import Path
 import unittest
@@ -9,16 +8,6 @@ import unittest
 from contracts.models import Clue, Region
 from core.regions import all_cells, referenced_cells, resolve_region
 from validation.semantics import evaluate_clue
-
-_CLUE_FIELD_NAMES = frozenset(f.name for f in dataclass_fields(Clue))
-
-
-@dataclass(frozen=True)
-class _CountCompareClue(Clue):
-    """Test-only Clue subclass carrying COUNT_COMPARE fields until contracts/models.py freezes them."""
-
-    other_region: Region | None = None
-    relation: str | None = None
 
 
 def _make_count_compare(
@@ -29,8 +18,7 @@ def _make_count_compare(
     *,
     k: int = 0,
 ) -> Clue:
-    cls = Clue if {"other_region", "relation"} <= _CLUE_FIELD_NAMES else _CountCompareClue
-    return cls(
+    return Clue(
         id=clue_id,
         kind="COUNT_COMPARE",
         region=region,

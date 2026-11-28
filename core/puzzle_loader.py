@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from contracts.models import Character, Clue, Puzzle, Region
+from contracts.models import Character, Clue, Puzzle, Region, Relation
 from core.regions import all_cells, referenced_cells
 
 _REQUIRED_TOP_KEYS = frozenset(
@@ -21,6 +21,7 @@ _CHARACTER_KEYS = frozenset({"cell", "name", "profession"})
 _FACT_KEYS = frozenset({"id", "kind", "cells", "status"})
 _BINARY_KEYS = frozenset({"id", "kind", "cells"})
 _COUNTING_KEYS = frozenset({"id", "kind", "region", "k"})
+_COMPARE_KEYS = frozenset({"id", "kind", "region", "other_region", "relation"})
 _BINARY_KINDS = frozenset({"SAME", "DIFFERENT"})
 _COUNTING_KINDS = frozenset({"EXACTLY", "AT_LEAST", "AT_MOST"})
 
@@ -169,7 +170,7 @@ def _parse_clue(owner : str, raw_clue : object, size : int) -> Clue:
             
         clue = Clue(id = clue_id, kind = kind, cells = (raw_cells[0], raw_cells[1]))
         
-    elif kind in _COUNTING_KINDS:
+    elif kind in _COUNTING_KINDS or kind == "PARITY":
         
         if keys != _COUNTING_KEYS:
             raise ValueError(
@@ -185,6 +186,20 @@ def _parse_clue(owner : str, raw_clue : object, size : int) -> Clue:
         
         region = _parse_region(raw_clue["region"])
         clue = Clue(id = clue_id, kind = kind, region = region, k = k)
+
+    elif kind == "COUNT_COMPARE":
+        if keys != _COMPARE_KEYS:
+            raise ValueError(f"COUNT_COMPARE must have exact keys {sorted(_COMPARE_KEYS)}")
+        try:
+            relation = Relation(raw_clue["relation"])
+        except (ValueError, TypeError):
+            raise ValueError("COUNT_COMPARE relation must be EQ, LT or GT") from None
+        clue = Clue(
+            id=clue_id, kind=kind,
+            region=_parse_region(raw_clue["region"]),
+            other_region=_parse_region(raw_clue["other_region"]),
+            relation=relation,
+        )
         
     
     else :

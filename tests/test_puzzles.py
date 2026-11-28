@@ -239,7 +239,7 @@ class PuzzleTests(unittest.TestCase):
                         "B2",
                         {
                             "id": "C04",
-                            "kind": "PARITY",
+                            "kind": "UNSUPPORTED_EXTENSION",
                             "region": {"kind": "ROW", "index": 1},
                             "k": 0,
                         },

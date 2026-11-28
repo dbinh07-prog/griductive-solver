@@ -1,6 +1,6 @@
 # API chung v1
 
-Đây là hợp đồng để nhóm tự triển khai. Code nghiệp vụ hiện để trống. Người 1 quản lý thay đổi API; không yêu cầu tên hàm giống repo tham khảo nếu contract này đã rõ và thống nhất.
+Đây là hợp đồng dùng chung. Phần người 1 (DPLL, session, worker và factory) đã triển khai; phần người 2–4 vẫn theo phân công. Người 1 quản lý thay đổi API; không yêu cầu tên hàm giống repo tham khảo nếu contract này đã rõ và thống nhất.
 
 ## Kiểu dữ liệu và quy ước
 
@@ -28,6 +28,8 @@ Nguồn chuẩn: `contracts/models.py`; interface tối thiểu: `contracts/port
 - Runtime là mili giây của toàn bộ lần solve; mỗi lần gọi có stats mới. Hết deadline phải phát sinh `SolverTimeout`.
 - Pure-literal và heuristic nâng cao là tùy chọn. Nếu thêm option thì người 1 cập nhật constructor/experiment config và docs cùng lúc.
 
+Bản DPLL hiện tại chọn biến chưa gán có ID nhỏ nhất, thử False rồi True. Unit propagation xử lý unit theo `(abs(literal), literal)`; literal trùng được bỏ, clause tautology được loại. Assumptions được thêm thành unit tạm, nên phép gán mới do assumption cũng nằm trong propagation count. Không dùng thư viện SAT bên ngoài.
+
 ## Encoder — người 2
 
 | API | Contract |
@@ -37,9 +39,9 @@ Nguồn chuẩn: `contracts/models.py`; interface tối thiểu: `contracts/port
 
 Encoder không gọi evaluator để sinh CNF. Ví dụ `SAME(i,j)` sinh `(¬Ci∨Cj) ∧ (Ci∨¬Cj)`; các câu đếm phải được chuyển tự động, không hardcode CNF theo puzzle.
 
-**Extensions chưa chốt.** Nhân (người 2) tự tìm hiểu và chọn ít nhất hai loại khác nhau thuộc phạm vi đề. PARITY và COUNT_COMPARE trong [EXTENSIONS.md](EXTENSIONS.md) chỉ là đề xuất; không phải hai kind bắt buộc của API v1 hiện tại.
+**Extensions đã tích hợp từ code Nhân:** PARITY và COUNT_COMPARE, ngoài sáu core templates. Xem [EXTENSIONS.md](EXTENSIONS.md) về ngữ nghĩa, encoding và biên.
 
-`Clue` hiện mô tả sáu core templates. Sau khi chọn extensions, Nhân thống nhất với người 1–3 về kind, trường dữ liệu, ngữ nghĩa và biên; cập nhật models/schema/validator/evaluator/tests cùng lúc rồi báo người 4. Không dùng field core với ý nghĩa khác hoặc âm thầm bỏ qua kind chưa hỗ trợ. Nếu chọn hai đề xuất, có thể tham khảo schema trong docs rồi bổ sung đúng các field cần thiết; chưa có `other_region`/`relation` trong contract core.
+`Clue` thêm hai field mặc định ở cuối để giữ các lời gọi positional cũ: `other_region: Region | None = None`, `relation: Relation | str | None = None`. Enum `Relation` có `EQ`, `GT`, `LT`. PARITY dùng `region` và `k=0/1`; COUNT_COMPARE dùng hai vùng và relation, không dùng `k`. Validator từ chối field không phù hợp và kind chưa hỗ trợ.
 
 ## Logic Agent — người 2
 
@@ -111,10 +113,35 @@ Kết quả submit:
 | `restart()` | Dừng/hủy worker, reset engine, cache, trace và metrics; public state mới. |
 | `export_trace(path)` | JSON/CSV gồm dữ liệu công khai; không export hidden solution. |
 | `metrics() -> SessionMetrics` | Counts của KB hiện tại và counters cộng từ query thực tế; không đếm lặp cache hoặc trace. |
+| `start_analysis(*, timeout_s=5.0) -> AnalysisJob hoặc None` | Bắt đầu worker do session quản lý; trả job đang chạy hoặc None nếu đã có cache cho snapshot hiện tại. |
+| `poll_analysis() -> Analysis hoặc None` | Nhận kết quả worker, kiểm tra state và cache/đếm đúng một lần; None khi chưa có kết quả hoặc job cũ đã bị loại. |
+| `cancel_analysis()` | Hủy job do session quản lý, không reveal và không xóa cache hợp lệ đã có. |
+| `accept_analysis(analysis) -> Analysis` | Nhận Analysis từ worker ngoài session sau khi controller kiểm tra generation; validate snapshot và đưa vào cache/metrics, không chạy SAT lại. Cùng object nhận lại không được đếm hai lần. |
 
 Mỗi `TraceEntry` có step, revision cũ, IDs clue đang active **trước** reveal, ô/verdict, SAT queries đã dùng và ID clue vừa lộ. Auto Solve do controller lên lịch nhiều `step()`, dừng khi solved/UNKNOWN/INCONSISTENT/error/timeout hoặc người chơi pause.
 
+Cache được đối chiếu cả public snapshot (gồm ID/revision), không chỉ một số revision. Submit kiểm tra classification trước khi gửi verdict cho engine; UNKNOWN/opposite/inconsistent không được gọi commit hay reveal. Stats cộng query của mỗi Analysis hợp lệ nhận được một lần. Worker bị hủy/lỗi/timeout không tạo dữ liệu giả; caller phải ghi trạng thái thất bại riêng khi benchmark, không suy số query còn thiếu từ trace.
+
+`SessionMetrics.primary_variables` có từ board. `auxiliary_variables` và `active_clauses` là **None** khi snapshot hiện tại chưa phân tích (lúc load hoặc sau reveal/restart), không phải 0 và không lấy số liệu snapshot cũ. GUI hiển thị “chưa phân tích” đến khi nhận Analysis. Tổng SAT counters và runtime của các analysis trước vẫn được giữ đến restart.
+
 `AnalysisJob(state,agent,timeout_s).start()/poll()/cancel()` là worker nền nhận public snapshot và agent theo Protocol; không nhận engine/private puzzle/path. Agent được truyền vào phải giữ đúng cấu hình encoder/solver đã chọn, không tự thay bằng một backend khác. `poll()` trả None khi pending, Analysis khi xong; exception phải phân biệt timeout/error. Không update widget từ worker. Worker trả sau restart/load phải bị loại kể cả khi puzzle ID/revision trùng lần load mới.
+
+Bản worker dùng multiprocessing `spawn`, deadline gồm cả thời gian khởi động process. Class của agent/encoder/solver phải ở cấp module, pickle được và không giữ widget/engine. Entry point khởi động ứng dụng phải nằm trong `if __name__ == "__main__":`. Worker trả lỗi agent về parent, worker chết bất thường thành RuntimeError; timeout thành SolverTimeout. `cancel()` dùng được nhiều lần, kết quả sau cancel bị bỏ. Nhận dữ liệu pipe trước khi join để không treo với payload lớn.
+
+Người 4 nên gọi các wrapper của session để worker và cache có cùng lifecycle:
+
+```python
+session.start_analysis(timeout_s=5.0)
+# Trong update loop, không phải vòng while chặn GUI:
+analysis = session.poll_analysis()
+if analysis is not None:
+    # Render analysis; chỉ enable submit/step khi có kết quả đúng snapshot.
+    pass
+```
+
+Sau accepted reveal gọi `start_analysis` cho snapshot mới. `session.restart()` tự hủy job cũ; khi đổi/đóng session gọi `cancel_analysis()` của session cũ. Controller vẫn cần generation token khi thay instance session/puzzle. Không sửa state/widget từ process con. `analyze()` đồng bộ phù hợp CLI/benchmark; GUI dùng luồng worker để tránh chặn render.
+
+Controller GUI hiện giữ worker riêng và gọi `accept_analysis` sau kiểm tra generation/ID/revision, rồi mới render kết quả. Đây là cách nối tương đương; không cần vừa tạo worker controller vừa gọi `start_analysis` để chạy hai job cùng lúc. Hint/Submit/Step sau đó dùng đúng cache đã nhận.
 
 ## GUI — người 4
 
@@ -122,4 +149,4 @@ GUI library và code hiển thị do người 4 chọn/viết. Các view nhận 
 
 Khung scene/view bổ sung ở `scenes/` và `ui/`; chi tiết hành vi cần thể hiện trong `docs/GUI_PLAN.md`. `render(surface)`/`handle_event(event)` dùng object trung lập trong scaffold, nhóm thay type bằng thư viện đã chọn khi triển khai.
 
-View hiện nhận tập ô cần highlight của core. Nếu Nhân chọn extension cần nhiều nhóm ô (ví dụ COUNT_COMPARE), nhóm chốt thêm tham số hiển thị sau; hiện chưa ép `BoardView` có dữ liệu hai vùng. Mọi extension đều phải hiển thị bằng public data, không lấy số lượng Criminal bí mật từ solution.
+View nhận tập ô cần highlight. COUNT_COMPARE hiện highlight hợp hai vùng theo row-major; text clue ghi riêng vùng trái, quan hệ và vùng phải. PARITY ghi chẵn/lẻ và vùng. Hiện chưa tô hai màu riêng cho hai vế. Mọi nội dung lấy từ public clue, không lấy số Criminal bí mật từ solution.
