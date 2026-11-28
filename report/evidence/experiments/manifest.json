@@ -1,0 +1,104 @@
+{
+  "timestamp_utc": "2026-11-28T09:15:23.705220+00:00",
+  "python_version": "3.12.11 (main, Jun  7 2025, 12:31:34)  [GCC UCRT 15.1.0 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "cpu_count": 24,
+  "suite": "puzzles\\benchmark",
+  "configuration": "dpll_baseline",
+  "timeout_s": 10.0,
+  "case_timeout_s": 50.0,
+  "repeats": 3,
+  "use_subprocess": true,
+  "cases": [
+    {
+      "file": "bench_3x3_01_easy.json",
+      "sha256": "398993d766560a5b18a6354bca8016a94748bf2a2e907a911f486c3be50f1969"
+    },
+    {
+      "file": "bench_3x3_02_easy.json",
+      "sha256": "12da495dd43d12ab7b3d47f075803682984ee2b1f34fcd0caa12192835103858"
+    },
+    {
+      "file": "bench_3x3_03_medium.json",
+      "sha256": "d7165b0a0dfdece6c72053cf403b125c125492470a29f873342b401e19b38c6b"
+    },
+    {
+      "file": "bench_3x3_04_medium.json",
+      "sha256": "51523153958468cf95f8effa9b93ef30e96ab93e330d1b223458a0dc701664d7"
+    },
+    {
+      "file": "bench_3x3_05_medium.json",
+      "sha256": "c82322c4b6a34f0dc1e4e615d9c2445757843281b7ed25c5b2b95ba8f2cfe809"
+    },
+    {
+      "file": "bench_3x3_06_hard.json",
+      "sha256": "5f23b8870e09c6cc23fb058276da23e955d98ca63310d507e513462b859650a8"
+    },
+    {
+      "file": "bench_3x3_07_hard.json",
+      "sha256": "2e564f33876003f2616092b306e25b800d594771259189f4d8bbbda1e82ed390"
+    },
+    {
+      "file": "bench_3x3_08_hard.json",
+      "sha256": "e2d717561ecaa3e97e2aefa42affb08f7b818dfbce41b8587b475d645f90e0bd"
+    },
+    {
+      "file": "bench_3x3_09_ext_parity.json",
+      "sha256": "9436e9ab7fb78030282b4ac24083ec9d0262d435265e4e561c668e6ab748aed5"
+    },
+    {
+      "file": "bench_3x3_10_ext_compare.json",
+      "sha256": "ee5d203e160410a4407c92973407f95f85d755474fdd607174bfa61775e8560d"
+    },
+    {
+      "file": "bench_4x4_01_easy.json",
+      "sha256": "d27dadc5e75c575bb37e94ac582f9d6cd3b3481df10aca22fd7175d27c5739e8"
+    },
+    {
+      "file": "bench_4x4_02_easy.json",
+      "sha256": "9e10fa6be593315f046a74184b36b6ab5cf254ed148173e831cd81467523ece5"
+    },
+    {
+      "file": "bench_4x4_03_medium.json",
+      "sha256": "8e29b5ba06712cd74f9f4c72d0beab09714e13d96648166d06fd47f6c7b48430"
+    },
+    {
+      "file": "bench_4x4_04_medium.json",
+      "sha256": "35ade1c2829224693c50ef89241a711738c092e379971a301b05bf0d3227afaf"
+    },
+    {
+      "file": "bench_4x4_05_hard.json",
+      "sha256": "7f9bbf48c5a442dfd9244d38cce8ca7f2213ab78ab106f9736835e999305dfbf"
+    },
+    {
+      "file": "bench_4x4_06_hard.json",
+      "sha256": "0c9456944ce5aba90a8b8ae212a38fc0bd2b0d16d5c2f4bcb1fec0244a19e9e0"
+    },
+    {
+      "file": "bench_4x4_07_ext_mixed.json",
+      "sha256": "c7680aedd663fed8e6c8bb10f43ba7041101313cdf1cc7e29d3ca362d3c110be"
+    },
+    {
+      "file": "bench_4x4_08_ext_hard.json",
+      "sha256": "7314351ebc8a00a0b79e99690c31bc149b1c890cfd67fa20b78021822e732ac6"
+    },
+    {
+      "file": "bench_5x5_01_easy.json",
+      "sha256": "feabd05514b031635f6810e6ae81fb2e2e1a7a88c27ae41822cb73e2d65a3b13"
+    },
+    {
+      "file": "bench_5x5_02_medium.json",
+      "sha256": "01e68b9bb871c0c8db0afa95bedf1168c1889d2ce204c971ea943016312e7d61"
+    },
+    {
+      "file": "bench_5x5_03_medium.json",
+      "sha256": "c54b108929e4aa561a3395d027801254dd2574093fd32551fd662bd6e9abffb5"
+    },
+    {
+      "file": "bench_5x5_04_hard.json",
+      "sha256": "480ace4234a8db3705e53a5f884579dd8b34dbbeffa9ef85100cb29311df886b"
+    }
+  ]
+}
