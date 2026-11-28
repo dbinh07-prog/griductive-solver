@@ -15,6 +15,7 @@ from contracts.models import PublicState, Status, Uniqueness, VerdictResult
 from core.game_engine import GameEngine
 from core.puzzle_loader import load_puzzle
 from game.session import GameSession
+from game.factory import create_session
 from ui import theme
 from tests.core_integration_data import CoreTestAgent, ImmediateTestJob
 from tests.member1_data import ErrorAgent
@@ -73,6 +74,19 @@ class RealComponentIntegrationTests(unittest.TestCase):
                 self.assertEqual(agent.check_uniqueness(full), Uniqueness.UNIQUE)
                 session = self.solve(GameSession(GameEngine(puzzle), agent))
                 self.assertEqual(dict(session.public_state().proved_statuses), dict(puzzle.solution))
+
+    def test_all_benchmark_cases_with_production_pipeline(self):
+        for path in sorted((ROOT / "puzzles/benchmark").glob("*.json")):
+            with self.subTest(case=path.name):
+                puzzle = load_puzzle(path)
+                session = create_session(str(path))
+                full = PublicState(puzzle.id, puzzle.title, puzzle.size, puzzle.characters,
+                                   revealed_clues=puzzle.clues)
+                self.assertEqual(session.agent.check_uniqueness(full), Uniqueness.UNIQUE)
+                self.solve(session)
+                self.assertEqual(dict(session.public_state().proved_statuses), dict(puzzle.solution))
+                self.assertEqual(session.metrics().deduction_steps,
+                                 puzzle.size ** 2 - len(puzzle.initially_revealed))
 
     def test_external_analysis_is_counted_once(self):
         session = self.make_session()
@@ -162,3 +176,23 @@ class RealComponentIntegrationTests(unittest.TestCase):
         self.assertEqual(controller.public_state, before)
         self.assertEqual(session.metrics().sat_calls, 0)
         self.assertEqual(session.trace, [])
+
+    def test_production_gui_autosolves_extension_case(self):
+        controller = AppController(create_session)
+        self.addCleanup(controller.close)
+        path = ROOT / "puzzles/examples/example_extensions_3x3.json"
+        controller.load_case(str(path))
+        self.wait_controller(controller)
+        self.assertEqual(controller.terminal_state, TerminalState.NONE)
+        self.assertEqual(controller.metrics.sat_calls, 17)
+        controller.hint()
+        self.assertEqual(controller.metrics.sat_calls, 17)
+        controller.toggle_auto()
+        deadline = perf_counter() + 10
+        while controller.terminal_state == TerminalState.NONE and perf_counter() < deadline:
+            controller.update(0.6)
+            sleep(0.01)
+        self.assertEqual(controller.terminal_state, TerminalState.SOLVED)
+        self.assertEqual(len(controller.trace_entries), 8)
+        self.assertEqual(controller.metrics.sat_calls, 80)
+        controller.render(pygame.display.get_surface())

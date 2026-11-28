@@ -2,7 +2,7 @@
 
 **Trạng thái tích hợp:** đã ghép GUI từ `feat/gui`, engine/loader/evaluator/dataset/runner từ `feature/engine-and-experiment`, code hiện có trên `main` và phần người 1 (DPLL, session, worker, factory). Các entry point thật được giữ nguyên, không thay bằng fixture trong test.
 
-**Phần còn thiếu trên các commit hiện có:** `CNFEncoder.validate_clue`, `CNFEncoder.encode`, `LogicAgent.analyze`, `LogicAgent.check_uniqueness` và các extensions Nhân đang làm. Main hiện mới có strategy FACT/SAME; nhánh GUI có `next_forced`. Menu/GUI và loader chạy được, nhưng suy luận/Auto Solve/benchmark production còn báo lỗi backend chưa triển khai. Không coi các test dùng adapter là bằng chứng backend này đã hoàn thành.
+**Nhánh tích hợp:** `feature/integrate`, đã ghép encoder/agent Nhân đẩy lên `main` đến commit `66c570a`. Luồng thật GUI → session → agent → encoder → DPLL → engine đã chạy, gồm sáu core templates và hai extensions `PARITY`, `COUNT_COMPARE`. Contract, loader, evaluator và text/highlight clue đã cập nhật tương ứng.
 
 ## Phân công 5 người
 
@@ -23,12 +23,12 @@ Hướng dẫn cụ thể: [người 1](docs/members/01-leader.md), [người 2]
 1. [Yêu cầu thầy và tiêu chí nghiệm thu](docs/REQUIREMENTS.md).
 2. [API chung v1](docs/API.md) và [format puzzle](docs/DATA_FORMAT.md).
 3. [Danh sách chức năng và bố cục GUI đề xuất](docs/GUI_PLAN.md).
-   [docs/EXTENSIONS.md](docs/EXTENSIONS.md) chỉ có đề xuất tham khảo PARITY/COUNT_COMPARE; Nhân tự lựa chọn, không bắt buộc dùng hai đề xuất đó.
+   [Hai extensions Nhân đã triển khai](docs/EXTENSIONS.md): PARITY và COUNT_COMPARE.
 4. Hướng dẫn của người phụ trách module; sau đó mới bắt đầu code.
 
 API v1 ở đây là **baseline đề xuất để cả nhóm dùng chung**, chưa phải bằng chứng nhóm đã đồng ý. Nếu đổi chữ ký hàm, kiểu dữ liệu hoặc ý nghĩa kết quả, người 1 cập nhật contract và báo các thành viên liên quan trước khi ghép.
 
-API/schema hiện chốt phần core. Sau khi Nhân chọn extensions, người 1–3 thống nhất thêm kiểu dữ liệu/encoding/evaluator, người 4 bổ sung hiển thị. Yêu cầu bắt buộc của đề vẫn là **ít nhất hai extensions khác nhau**, chưa chốt tên cụ thể.
+API/schema gồm sáu core templates và hai extensions đã được Nhân triển khai. `Clue` có thêm `other_region` và `relation`; sáu core giữ nguyên ngữ nghĩa. Puzzle demo hai extensions: `puzzles/examples/example_extensions_3x3.json`.
 
 ## Cấu trúc repo
 
@@ -44,7 +44,7 @@ scenes/, ui/, assets/        khung các màn và thành phần GUI — người 
 puzzles/examples/           JSON minh họa format, không phải bộ benchmark cuối
 puzzles/benchmark/          nhiều puzzle 3x3, 4x4 do người 3 xây dựng
 experiments/                khung chạy thực nghiệm — người 3
-tests/                      vị trí và tên ca kiểm thử, chưa có nội dung test
+tests/                      kiểm thử thuật toán, module và luồng tích hợp thật
 docs/                       API, yêu cầu, phân việc, kế hoạch GUI, QA
 outputs/                    kết quả chạy máy sinh ra, không commit
 report/                     khung báo cáo, số liệu/ảnh được chọn và video checklist
@@ -62,7 +62,7 @@ report/                     khung báo cáo, số liệu/ảnh được chọn v
 
 Luồng ghép: **GUI → GameSession → LogicAgent → CNFEncoder → DPLLSolver**. Khi verdict được chứng minh, session gửi analysis hiện hành cho **GameEngine** để cập nhật trạng thái. Agent không nhận engine, puzzle hoặc đường dẫn JSON. GUI không tự xác định verdict.
 
-## Kiểm tra bộ khung hiện tại
+## Chạy chương trình
 
 Dùng Python **3.11 trở lên**, nhóm nên thống nhất Python 3.12. Mở terminal ở thư mục có `main.py`:
 
@@ -76,7 +76,7 @@ Lệnh cài thư viện lấy Pygame theo requirements. `--check` chỉ kiểm t
 
 `requirements.txt` đã khóa `pygame==2.6.1` theo nhánh GUI. Môi trường ảo, `.env`, cache và file tạm chỉ giữ ở máy cá nhân; `.gitignore` loại chúng khỏi repo.
 
-## Sau khi nhóm tự triển khai
+## Kiểm thử và thực nghiệm
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -85,7 +85,9 @@ python main.py
 python run_experiments.py
 ```
 
-Test DPLL, session, worker, factory, engine, loader, semantics và GUI đã ghép. Test encoder/agent/extensions chưa triển khai vẫn skip có chủ đích; **skip không chứng minh chương trình đúng**. Người phụ trách viết nội dung rồi bỏ skip khi phần tương ứng hoàn thành.
+Toàn bộ 104 test đã chạy đạt, không skip: DPLL, encoder, agent, extensions, session, worker, factory, engine, loader, evaluator và GUI. Có đối chiếu CNF với vét cạn/evaluator độc lập, kiểm tra vùng giao/rỗng, UNKNOWN/INCONSISTENT, timeout và restart/load khi worker đang chạy.
+
+Kiểm tra tích hợp ngày 28/11/2026: 18 puzzle benchmark 3x3/4x4/5x5 × 3 lượt, đủ 54/54 `SOLVED` và `UNIQUE`. Demo extensions cũng được kiểm tra với backend thật và Auto Solve qua worker GUI. Đây là kiểm tra tích hợp cấu hình `dpll_baseline`; nhóm vẫn cần thực nghiệm/nhận xét cho report theo đề.
 
 Kiểm tra riêng phần người 1:
 
@@ -95,7 +97,7 @@ python -m unittest tests.test_dpll tests.test_integration tests.test_worker test
 
 `tests/member1_data.py` là fixture nhỏ chỉ hỗ trợ FACT, phục vụ kiểm tra tích hợp với DPLL thật; không phải encoder/agent/engine hoàn chỉnh để nộp bài. `create_session` luôn nối module thật và báo lỗi nếu phần phụ thuộc chưa triển khai, không tự chuyển sang fixture.
 
-`tests/core_integration_data.py` là adapter sáu core chỉ dùng trong test, để kiểm tra DPLL/session với engine thật trên 18 puzzle 3x3/4x4/5x5 trong khi encoder/agent production chưa xong. `tests/test_real_component_integration.py` kiểm tra thêm việc GUI nhận Analysis của worker vào cache session, không chạy SAT lần hai khi Hint/Submit. Không đưa adapter này vào `game.factory` hoặc script thực nghiệm.
+`tests/core_integration_data.py` là adapter sáu core chỉ dùng trong test hồi quy. `tests/test_real_component_integration.py` còn chạy cả 18 puzzle với encoder/agent production và Auto Solve demo extensions bằng worker thật. File này cũng kiểm tra GUI đưa Analysis vào cache session, không chạy SAT lần hai khi Hint/Submit. Factory và script thực nghiệm luôn dùng backend production.
 
 ## Mốc tích hợp
 

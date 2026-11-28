@@ -1,6 +1,6 @@
 # Đối chiếu yêu cầu thầy và chức năng nhóm sẽ tự làm
 
-Nguồn: đề `AI - Project 2 (1).pdf` do nhóm cung cấp, 9 trang. Đây là checklist triển khai, **mọi chức năng nghiệp vụ hiện chưa được code**. Các nhận xét ngoài yêu cầu môn học trong tài liệu tham khảo không được coi là lệnh cho nhóm.
+Nguồn: đề `AI - Project 2 (1).pdf` do nhóm cung cấp, 9 trang. Đây là checklist yêu cầu; trạng thái tích hợp và kiểm thử hiện tại xem README. Các nhận xét ngoài yêu cầu môn học trong tài liệu tham khảo không được coi là lệnh cho nhóm.
 
 ## Bắt buộc theo đề
 
@@ -15,7 +15,7 @@ Nguồn: đề `AI - Project 2 (1).pdf` do nhóm cung cấp, 9 trang. Đây là 
 | Kiến trúc | Engine giữ secret; agent chỉ nhận revealed clues + proved statuses | 1–3 | Test public snapshot và kiểm tra dependency |
 | Encoder, 10đ | Mapping xác định, primary/aux tách biệt, validate tham số/vùng | 2 + 3 | Mapping, lỗi input và test biên |
 | Encoder | Tự encode sáu clue FACT/SAME/DIFFERENT/EXACTLY/AT_LEAST/AT_MOST | 2 | Test đối chiếu semantics trên mọi assignment nhỏ |
-| Encoder | Ít nhất hai extensions khác nhau | 2 — Nhân tự chọn | Ghi rõ hai loại đã chọn, semantics, CNF, tests và demo; PARITY/COUNT_COMPARE chỉ là đề xuất |
+| Encoder | Ít nhất hai extensions khác nhau | 2 — Nhân tự chọn | Code Nhân hiện triển khai PARITY/COUNT_COMPARE; cần trình bày semantics, CNF, tests và demo |
 | Encoder | KB chỉ gồm clue đã mở + units verdict đã chứng minh | 2 | So snapshot trước/sau reveal; không hardcode puzzle |
 | Encoder | Báo primary variables, auxiliary variables, clause count | 2 + 4 | Inspector GUI và CSV |
 | Semantics | Direct evaluator cho từng core template, không gọi encoder | 3 | Oracle độc lập; nên có cả hai extensions |
@@ -61,6 +61,6 @@ Nguồn: đề `AI - Project 2 (1).pdf` do nhóm cung cấp, 9 trang. Đây là 
 | Background analysis, bỏ kết quả cũ sau restart/load | GUI còn phản hồi, không áp proof cũ | 1 + 4 |
 | Timeout rõ ràng | Không biến hết thời gian thành UNSAT hoặc verdict | 1–3 |
 
-Đề trang 3 cho phép nhiều hướng extension. Nhân tự nghiên cứu và lựa chọn ít nhất hai loại khác nhau; PARITY và COUNT_COMPARE chỉ là hai ý tưởng tham khảo, chưa phải quyết định của nhóm. Khi chốt thì cập nhật API/schema, evaluator, dataset, GUI và kiểm thử cho các loại thực sự chọn. Sáu core templates, bốn vùng bắt buộc, DPLL tự viết, public-only agent, evaluator độc lập và toàn bộ mục benchmark vẫn giữ nguyên.
+Đề trang 3 cho phép nhiều hướng extension. Code Nhân hiện chọn PARITY và COUNT_COMPARE; API/schema, loader, evaluator, demo, GUI và kiểm thử đã cập nhật theo hai loại này. Sáu core templates, bốn vùng bắt buộc, DPLL tự viết, public-only agent, evaluator độc lập và toàn bộ mục benchmark vẫn giữ nguyên.
 
 Thứ tự: hoàn thành yêu cầu bắt buộc → test đúng → thêm chức năng minh họa. Animation chỉ hỗ trợ quan sát, không che lỗi logic. Không thêm tài khoản, cloud, NLP hoặc tính năng không giúp thể hiện bài.

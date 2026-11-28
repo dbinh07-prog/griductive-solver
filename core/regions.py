@@ -154,6 +154,26 @@ def referenced_cells(clue: Clue, size: int) -> tuple[str, ...]:
     if not isinstance(clue, Clue):
         raise ValueError(f"Expected Clue instance, got {type(clue).__name__}")
 
+    if clue.kind == "COUNT_COMPARE":
+        if clue.cells != () or clue.status is not True or type(clue.k) is not int or clue.k != 0:
+            raise ValueError("COUNT_COMPARE requires default cells, status and k")
+        if not isinstance(clue.relation, str) or clue.relation not in ("EQ", "LT", "GT"):
+            raise ValueError("COUNT_COMPARE relation must be EQ, LT or GT")
+        left = resolve_region(clue.region, size)
+        right = resolve_region(clue.other_region, size)
+        cells = set(left) | set(right)
+        return tuple(cell for cell in all_cells(size) if cell in cells)
+
+    if clue.other_region is not None or clue.relation is not None:
+        raise ValueError(f"{clue.kind} does not use other_region or relation")
+
+    if clue.kind == "PARITY":
+        if clue.cells != () or clue.status is not True:
+            raise ValueError("PARITY requires default cells and status")
+        if type(clue.k) is not int or clue.k not in (0, 1):
+            raise ValueError("PARITY k must be 0 (even) or 1 (odd)")
+        return resolve_region(clue.region, size)
+
     if clue.kind == "FACT":
         
         if not isinstance(clue.cells, tuple) or len(clue.cells) != 1:

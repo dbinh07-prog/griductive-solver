@@ -138,7 +138,7 @@ class SemanticsTests(unittest.TestCase):
             Clue("b12", "EXACTLY", region=Region("ROW", index=1), k=4),
             Clue("b13", "AT_LEAST", region=Region("ROW", index=1), k=True),
             Clue("b14", "AT_MOST", region=Region("ROW", index=1), cells=("A1",), k=1),
-            Clue("b15", "PARITY", region=Region("ROW", index=1), k=0),
+            Clue("b15", "PARITY", region=Region("ROW", index=1), k=2),
             Clue("b16", "COUNT_COMPARE", region=Region("ROW", index=1), k=0),
         ]
         for clue in bad_clues:

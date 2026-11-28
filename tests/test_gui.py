@@ -324,7 +324,7 @@ class GUITests(unittest.TestCase):
         self.assertEqual((ctrl.selected_clue_id, ctrl.highlighted_cells), (None, ()))
         ctrl.close()
 
-        self.assertEqual(set(clue_formatters.keys()), {"FACT", "SAME", "DIFFERENT", "EXACTLY", "AT_LEAST", "AT_MOST"})
+        self.assertEqual(set(clue_formatters.keys()), {"FACT", "SAME", "DIFFERENT", "EXACTLY", "AT_LEAST", "AT_MOST", "PARITY", "COUNT_COMPARE"})
         cases = (
             (Clue("c1", "FACT", ("A1",), True), "A1 is Criminal."),
             (Clue("c2", "SAME", ("A1", "B2")), "same status"),

@@ -39,9 +39,9 @@ Bản DPLL hiện tại chọn biến chưa gán có ID nhỏ nhất, thử Fals
 
 Encoder không gọi evaluator để sinh CNF. Ví dụ `SAME(i,j)` sinh `(¬Ci∨Cj) ∧ (Ci∨¬Cj)`; các câu đếm phải được chuyển tự động, không hardcode CNF theo puzzle.
 
-**Extensions chưa chốt.** Nhân (người 2) tự tìm hiểu và chọn ít nhất hai loại khác nhau thuộc phạm vi đề. PARITY và COUNT_COMPARE trong [EXTENSIONS.md](EXTENSIONS.md) chỉ là đề xuất; không phải hai kind bắt buộc của API v1 hiện tại.
+**Extensions đã tích hợp từ code Nhân:** PARITY và COUNT_COMPARE, ngoài sáu core templates. Xem [EXTENSIONS.md](EXTENSIONS.md) về ngữ nghĩa, encoding và biên.
 
-`Clue` hiện mô tả sáu core templates. Sau khi chọn extensions, Nhân thống nhất với người 1–3 về kind, trường dữ liệu, ngữ nghĩa và biên; cập nhật models/schema/validator/evaluator/tests cùng lúc rồi báo người 4. Không dùng field core với ý nghĩa khác hoặc âm thầm bỏ qua kind chưa hỗ trợ. Nếu chọn hai đề xuất, có thể tham khảo schema trong docs rồi bổ sung đúng các field cần thiết; chưa có `other_region`/`relation` trong contract core.
+`Clue` thêm hai field mặc định ở cuối để giữ các lời gọi positional cũ: `other_region: Region | None = None`, `relation: Relation | str | None = None`. Enum `Relation` có `EQ`, `GT`, `LT`. PARITY dùng `region` và `k=0/1`; COUNT_COMPARE dùng hai vùng và relation, không dùng `k`. Validator từ chối field không phù hợp và kind chưa hỗ trợ.
 
 ## Logic Agent — người 2
 
@@ -149,4 +149,4 @@ GUI library và code hiển thị do người 4 chọn/viết. Các view nhận 
 
 Khung scene/view bổ sung ở `scenes/` và `ui/`; chi tiết hành vi cần thể hiện trong `docs/GUI_PLAN.md`. `render(surface)`/`handle_event(event)` dùng object trung lập trong scaffold, nhóm thay type bằng thư viện đã chọn khi triển khai.
 
-View hiện nhận tập ô cần highlight của core. Nếu Nhân chọn extension cần nhiều nhóm ô (ví dụ COUNT_COMPARE), nhóm chốt thêm tham số hiển thị sau; hiện chưa ép `BoardView` có dữ liệu hai vùng. Mọi extension đều phải hiển thị bằng public data, không lấy số lượng Criminal bí mật từ solution.
+View nhận tập ô cần highlight. COUNT_COMPARE hiện highlight hợp hai vùng theo row-major; text clue ghi riêng vùng trái, quan hệ và vùng phải. PARITY ghi chẵn/lẻ và vùng. Hiện chưa tô hai màu riêng cho hai vế. Mọi nội dung lấy từ public clue, không lấy số Criminal bí mật từ solution.

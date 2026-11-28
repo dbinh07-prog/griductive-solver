@@ -1,4 +1,4 @@
-from contracts.models import CNF, Clue, Region, PublicState
+from contracts.models import CNF, Character, Clue, Region, PublicState
 from abc import ABC, abstractmethod
 from core.regions import all_cells, resolve_region, referenced_cells
 import itertools
@@ -509,6 +509,8 @@ class CNFEncoder:
         if type(size) is not int or size <= 0:
             raise ValueError("Size must be a positive integer")
         strategy = self._strategy_for(clue)
+        if not isinstance(clue.id, str) or not clue.id.strip():
+            raise ValueError("Clue ID must be a nonempty string")
 
         if not isinstance(clue.cells, tuple):
             raise ValueError("Clue cells must be a tuple")
@@ -549,8 +551,15 @@ class CNFEncoder:
 
         # Primary IDs depend only on board position, including unresolved cells.
         cells = all_cells(public_state.size)
+        if not isinstance(public_state.characters, tuple) or not all(
+            isinstance(person, Character) for person in public_state.characters
+        ):
+            raise ValueError("Characters must be a tuple of Character instances")
+        if tuple(person.cell for person in public_state.characters) != cells:
+            raise ValueError("Characters must cover the board in row-major order")
         variables = {cell: index for index, cell in enumerate(cells, start=1)}
         clauses = []
+        proved_cells = set()
 
         for entry in public_state.proved_statuses:
             if not isinstance(entry, tuple) or len(entry) != 2:
@@ -560,11 +569,16 @@ class CNFEncoder:
                 raise ValueError(f"Invalid proved cell {cell!r}")
             if type(status) is not bool:
                 raise ValueError("Proved statuses must be boolean values")
+            if cell in proved_cells:
+                raise ValueError(f"Duplicate proved cell {cell!r}")
+            proved_cells.add(cell)
 
             variable = variables[cell]
             clauses.append((variable if status else -variable,))
 
         # Only the revealed_clues snapshot contributes clue clauses.
+        owners = set()
+        clue_ids = set()
         for entry in public_state.revealed_clues:
             if not isinstance(entry, tuple) or len(entry) != 2:
                 raise ValueError("A revealed clue must be an (owner, clue) pair")
@@ -573,6 +587,10 @@ class CNFEncoder:
                 raise ValueError(f"Invalid clue owner {owner!r}")
 
             self.validate_clue(clue, public_state.size)
+            if owner in owners or clue.id in clue_ids:
+                raise ValueError("Revealed clue owners and IDs must be distinct")
+            owners.add(owner)
+            clue_ids.add(clue.id)
             strategy = self._strategy_for(clue)
             clue_clauses = strategy.encode_clue(clue, variables)
             clauses.extend(tuple(clause) for clause in clue_clauses)

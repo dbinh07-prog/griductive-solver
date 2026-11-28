@@ -40,6 +40,19 @@ def evaluate_clue(clue: Clue, assignment: dict[str, bool], size: int) -> bool:
     if clue.kind == "DIFFERENT":
         a,b = clue.cells
         return assignment[a] != assignment[b]
+
+    if clue.kind == "PARITY":
+        cells = resolve_region(clue.region, size)
+        return sum(assignment[cell] for cell in cells) % 2 == clue.k
+
+    if clue.kind == "COUNT_COMPARE":
+        left = sum(assignment[cell] for cell in resolve_region(clue.region, size))
+        right = sum(assignment[cell] for cell in resolve_region(clue.other_region, size))
+        if clue.relation == "EQ":
+            return left == right
+        if clue.relation == "LT":
+            return left < right
+        return left > right
     
     if clue.kind in ("EXACTLY", "AT_LEAST", "AT_MOST"):
         

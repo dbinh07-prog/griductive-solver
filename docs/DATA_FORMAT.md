@@ -1,6 +1,6 @@
 # Puzzle JSON v1
 
-File minh họa core: `puzzles/examples/example_3x3.json`. Đây là mẫu format cho tích hợp, không phải bộ thực nghiệm cuối hoặc bằng chứng loader/solver đã chạy đúng. Schema extensions sẽ bổ sung sau khi Nhân lựa chọn; ví dụ trong docs chỉ là đề xuất.
+File minh họa core: `puzzles/examples/example_3x3.json`; hai extensions: `puzzles/examples/example_extensions_3x3.json`. Bộ thực nghiệm nằm riêng trong `puzzles/benchmark/`.
 
 Top-level: `schema_version=1`, `id`, `title`, `size`, `characters`, `solution`, `clues`, `initially_revealed`.
 
@@ -20,14 +20,16 @@ Top-level: `schema_version=1`, `id`, `title`, `size`, `characters`, `solution`, 
 | EXACTLY | `region`, `k` | Đúng k Criminal |
 | AT_LEAST | `region`, `k` | Ít nhất k Criminal |
 | AT_MOST | `region`, `k` | Nhiều nhất k Criminal |
+| PARITY | `region`, `k:0/1` | Số Criminal chẵn/lẻ |
+| COUNT_COMPARE | `region`, `other_region`, `relation` | So số Criminal hai vùng; EQ/LT/GT |
 
 Binary operands phải là hai ô khác nhau. Counting `k` là int, không nhận bool, thỏa `0≤k≤|R|`. Với vùng rỗng, k=0 hợp lệ: EXACTLY(0), AT_LEAST(0), AT_MOST(0) đều true. Không diễn giải clue theo status của chủ thẻ: **mọi clue đều đúng**.
 
 FACT/SAME/DIFFERENT dùng `cells`, không dùng region. Ba clue đếm dùng `region` và `k`, không dùng `cells`. Field không liên quan trong dataclass giữ mặc định. Parser phải báo kind chưa hỗ trợ, không âm thầm bỏ qua.
 
-## Extensions chưa chốt
+## Extensions đã tích hợp
 
-Nhân tự chọn ít nhất hai loại khác nhau; trước khi đưa vào dataset cần chốt kind, trường dữ liệu, ngữ nghĩa/biên, validation, encoder và evaluator. PARITY/COUNT_COMPARE ở [EXTENSIONS.md](EXTENSIONS.md) chỉ là gợi ý, không thuộc các kind core bắt buộc trong bảng trên. File JSON đề xuất nằm riêng trong `docs/examples/`, không phải input mà loader core phải đọc được lúc này.
+Nhân đã triển khai PARITY và COUNT_COMPARE; loader, validator, evaluator và GUI hỗ trợ cả hai. PARITY nhận đúng `k=0` hoặc `k=1`, kể cả vùng rỗng. COUNT_COMPARE dùng `relation` là chuỗi `EQ`, `LT`, `GT` trong JSON; dataclass nhận `Relation` hoặc chuỗi tương ứng. Hai vùng có thể rời, giao, trùng hoặc rỗng. Không dùng `cells`, `status`, `k` cho COUNT_COMPARE; `other_region` và `relation` chỉ dùng cho COUNT_COMPARE. Xem [EXTENSIONS.md](EXTENSIONS.md) để biết encoding hiện tại và giới hạn.
 
 ## Region
 

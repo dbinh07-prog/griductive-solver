@@ -57,6 +57,19 @@ def _format_at_most(clue: Clue, size: int) -> str:
     return f"At most {clue.k} {_criminal_noun(clue.k)} in {target}."
 
 
+def _format_parity(clue: Clue, size: int) -> str:
+    target = describe_region(clue.region, size)
+    parity = "even" if clue.k == 0 else "odd"
+    return f"An {parity} number of Criminals in {target}."
+
+
+def _format_compare(clue: Clue, size: int) -> str:
+    left = describe_region(clue.region, size)
+    right = describe_region(clue.other_region, size)
+    relation = {"EQ": "equals", "LT": "is less than", "GT": "is greater than"}[clue.relation]
+    return f"The number of Criminals in {left} {relation} the number in {right}."
+
+
 clue_formatters: dict[str, Callable[[Clue, int], str]] = {
     "FACT": _format_fact,
     "SAME": _format_same,
@@ -64,6 +77,8 @@ clue_formatters: dict[str, Callable[[Clue, int], str]] = {
     "EXACTLY": _format_exactly,
     "AT_LEAST": _format_at_least,
     "AT_MOST": _format_at_most,
+    "PARITY": _format_parity,
+    "COUNT_COMPARE": _format_compare,
 }
 
 
