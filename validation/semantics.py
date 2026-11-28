@@ -56,5 +56,28 @@ def evaluate_clue(clue: Clue, assignment: dict[str, bool], size: int) -> bool:
         
         if clue.kind == "AT_MOST":
             return criminal_count <= clue.k
-        
+
+    if clue.kind == "PARITY":
+        assert clue.region is not None
+        region_cells = resolve_region(clue.region, size)
+        criminal_count = sum(1 for cell in region_cells if assignment[cell])
+        return criminal_count % 2 == clue.k
+
+    if clue.kind == "COUNT_COMPARE":
+        other_region = getattr(clue, "other_region", None)
+        relation = getattr(clue, "relation", None)
+        assert clue.region is not None and other_region is not None
+        left_count = sum(
+            1 for cell in resolve_region(clue.region, size) if assignment[cell]
+        )
+        right_count = sum(
+            1 for cell in resolve_region(other_region, size) if assignment[cell]
+        )
+        if relation == "EQ":
+            return left_count == right_count
+        if relation == "LT":
+            return left_count < right_count
+        if relation == "GT":
+            return left_count > right_count
+
     raise ValueError(f"Unsupported clue kind: {clue.kind!r}")
