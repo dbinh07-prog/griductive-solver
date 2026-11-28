@@ -382,6 +382,44 @@ class GUITests(unittest.TestCase):
                 if isinstance(node, ast.Attribute) and node.attr == "Puzzle":
                     self.fail(f"{path.name}: accessed .Puzzle")
 
+    def test_hint_points_to_a_card_without_showing_its_verdict(self) -> None:
+        surf = pygame.Surface((1280, 720))
+        for size in (3, 4, 5):
+            for verdict in (Status.CRIMINAL, Status.INNOCENT):
+                with self.subTest(size=size, verdict=verdict):
+                    state = make_mock_public_state(size, revealed_count=1)
+                    analysis = make_mock_analysis(state, forced={"B1": verdict})
+                    session = StubSession(state, analysis)
+                    ctrl = AppController(
+                        lambda _p: session,
+                        worker_factory=lambda s, a, t: StubAnalysisJob(s, a, t, outcome=analysis),
+                    )
+                    try:
+                        ctrl.load_case("mock")
+                        ctrl.update(0)
+                        before_metrics = session.metrics()
+                        ctrl.hint()
+                        ctrl.hint()
+                        self.assertEqual(ctrl.selected_cell, "B1")
+                        self.assertIn("B1", ctrl.status_message)
+                        self.assertNotIn(verdict.value, ctrl.status_message)
+                        text = _capture_rendered_text(lambda: ctrl.render(surf))
+                        self.assertTrue(any("Consider B1" in line for line in text))
+                        self.assertFalse(any("is forced" in line for line in text))
+                        self.assertIn("[?] FACE-DOWN", text)
+                        self.assertEqual(session.public_state(), state)
+                        self.assertEqual(session.metrics(), before_metrics)
+                        self.assertEqual(session.trace, [])
+                        self.assertEqual(session.step_calls, 0)
+                        self.assertEqual(ctrl.scene.board_view._hint_cell, "B1")
+                        ctrl.next_step()
+                        self.assertEqual(dict(ctrl.public_state.proved_statuses)["B1"],
+                                         verdict == Status.CRIMINAL)
+                        self.assertEqual(len(session.trace), 1)
+                        self.assertIsNone(ctrl.hint_move)
+                    finally:
+                        ctrl.close()
+
     def test_long_content_resize_and_scroll(self) -> None:
         for w, h in ((1280, 720), (1024, 640)):
             lay = compute_game_layout(w, h)

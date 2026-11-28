@@ -63,7 +63,7 @@ _SECTIONS: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
         "5. Controls & Keyboard Shortcuts",
         (
-            "[H] Hint: Highlight a forced move without revealing the card or adding a deduction step.",
+            "[H] Hint: Highlight a character to consider next. You choose the verdict; Hint does not reveal the card or add a deduction step.",
             "[N] Next Step: Reveal one deterministic forced card via the solver.",
             "[Space] Auto Solve / Pause: Toggle automatic step-by-step solving or pause immediately.",
             "[R] Restart: Reset the current puzzle back to its initial clues.",

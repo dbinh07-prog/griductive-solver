@@ -206,8 +206,8 @@ class InspectorPanel:
 
         if self._hint is not None or self._no_forced_msg:
             if self._hint is not None:
-                h_cell, h_status = self._hint
-                hint_txt = f"Hint: {h_cell} is forced {h_status.value}."
+                h_cell, _ = self._hint
+                hint_txt = f"Consider {h_cell} using the revealed clues."
             else:
                 hint_txt = self._no_forced_msg or "No forced move available from current public evidence."
             y = self._draw_box(

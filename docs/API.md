@@ -118,6 +118,8 @@ Kết quả submit:
 | `cancel_analysis()` | Hủy job do session quản lý, không reveal và không xóa cache hợp lệ đã có. |
 | `accept_analysis(analysis) -> Analysis` | Nhận Analysis từ worker ngoài session sau khi controller kiểm tra generation; validate snapshot và đưa vào cache/metrics, không chạy SAT lại. Cùng object nhận lại không được đếm hai lần. |
 
+`hint()` vẫn trả `(cell, Status)` cho backend dùng chung với Step. Khi người chơi bấm Hint, GUI chỉ chọn/tô sáng ô và gợi ý xét ô đó từ các clue đã mở, không hiển thị Status trong Inspector hoặc thanh thông báo. Người chơi tự chọn verdict; Next Step và Auto Solve mới tự gửi kết luận để mở thẻ.
+
 Mỗi `TraceEntry` có step, revision cũ, IDs clue đang active **trước** reveal, ô/verdict, SAT queries đã dùng và ID clue vừa lộ. Auto Solve do controller lên lịch nhiều `step()`, dừng khi solved/UNKNOWN/INCONSISTENT/error/timeout hoặc người chơi pause.
 
 Cache được đối chiếu cả public snapshot (gồm ID/revision), không chỉ một số revision. Submit kiểm tra classification trước khi gửi verdict cho engine; UNKNOWN/opposite/inconsistent không được gọi commit hay reveal. Stats cộng query của mỗi Analysis hợp lệ nhận được một lần. Worker bị hủy/lỗi/timeout không tạo dữ liệu giả; caller phải ghi trạng thái thất bại riêng khi benchmark, không suy số query còn thiếu từ trace.

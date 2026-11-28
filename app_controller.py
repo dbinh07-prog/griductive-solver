@@ -337,7 +337,7 @@ class AppController:
             self._no_forced_message = None
             self.select_cell(h_cell)
             self._animations.trigger_pulse(h_cell)
-            self._status_message = f"Hint: {h_cell} is forced {h_status.value}."
+            self._status_message = f"Hint: Consider {h_cell} using the revealed clues."
             return
 
         self._hint_move = None
